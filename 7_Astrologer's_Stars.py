@@ -1,7 +1,10 @@
 '''
      Pattern printing
 2. input = int n
+
 3. boolean = take 1 0 and make it a tue or false
+
+Yo
 
 4. if TRUE n = rows
 *****
