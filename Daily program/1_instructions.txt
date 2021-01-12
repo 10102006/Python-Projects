@@ -1,0 +1,12 @@
+# So this is another program to make us healthy
+"""
+****************Instructions*****************
+
+so there are three things
+timings(9am -- 5pm)
+
+Water = "Drink water" (3.5 L)- (any time interval) - have to input - make the file with time stamp
+Eyes = "Do eye exercise" - Done - (every 30 min) - log in the same file with time stamp
+Physical = "Do physical exercise" - (every 45 min) - log in the same file with time stamp
+   
+"""
