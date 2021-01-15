@@ -15,12 +15,14 @@ pdfs_path = 'F://NP DATA BACKUP\Mangas/PDFS/'
 
 # * Defining
 
-def ExctractSeries(main_url, series_name,number_of_chapters):
+def ExctractSeries(main_url, series_name, number_of_chapters=2, startingChapter=0):
   """
   """
-  list_manga_links = [f'{main_url[:-1]}{index + 1}/' for index in range(number_of_chapters - 1)]
+  startingChapter = 31
+  list_manga_links = [f'{main_url[:-1]}{index + startingChapter + 1}/' for index in range(number_of_chapters - 1)]
 
-  for chapter_index, links  in enumerate(list_manga_links, 1):
+
+  for chapter_index, links  in enumerate(list_manga_links, startingChapter):
     manga_chapter_name = f'{series_name}_Chapter_{chapter_index}'
     pdfs_folder_path = os.path.join(pdfs_path, manga_chapter_name)
 
@@ -47,5 +49,5 @@ def ExctractSeries(main_url, series_name,number_of_chapters):
 # ? Implementation
 if __name__ == "__main__":
   url = 'https://read.one-punchman.com/manga/one-punch-man-chapter-/'
-  ExctractSeries(url,'One_Punch_Man', 4)
+  ExctractSeries(url,'One_Punch_Man', 138)
 
