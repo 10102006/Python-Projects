@@ -46,6 +46,6 @@ def ExctractSeries(main_url, series_name,number_of_chapters):
 
 # ? Implementation
 if __name__ == "__main__":
-  url = 'https://w11.tenseishitaraslimedattaken-manga.com/manga/tensei-shitara-slime-datta-ken-chapter-/'
-  ExctractSeries(url,'That_Time_as_Slime', 6)
+  url = 'https://read.one-punchman.com/manga/one-punch-man-chapter-/'
+  ExctractSeries(url,'One_Punch_Man', 4)
 

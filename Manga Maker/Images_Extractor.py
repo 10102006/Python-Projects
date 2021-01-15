@@ -30,8 +30,8 @@ def ExtractPanels(url, images_folder_path, commonlink=''):
         try:
             img_data = rq.get(img_link).content
 
-            with open(f'slime_{index}.jpg', 'wb+') as f:
-                print(f'slime_{index}.jpg sucessfully made! > Extractor')
+            with open(f'{index}.jpg', 'wb+') as f:
+                print(f'panel_{index}.jpg sucessfully made! > Extractor')
                 f.write(img_data)
         except:
             pass

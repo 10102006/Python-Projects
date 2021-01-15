@@ -13,8 +13,7 @@ from PyPDF2 import PdfFileMerger
 
 # * Defining
 images_path = path.join('F://NP DATA BACKUP\Mangas\Images/')
-pdfs_path = path.join('F://NP DATA BACKUP\Mangas/PDFS/')
-# pdfs_path = path.join('F:\Android\android-sdk\Mangas\PDFS\Chapter1')
+pdfs_path = path.join('F://NP DATA BACKUP\Mangas/PDFS/We_Never_Learn_Chapter_1/')
 
 class Main():
     """
@@ -71,11 +70,14 @@ class Solo():
         image.save(pdf_image_path)
 
     def P_MakePdfs(self, images_folder_path, pdfs_folder_path):
-        list_images = os.listdir(images_folder_path)
+        list_images = [image[:-4] for image in os.listdir(images_folder_path)]
+        list_images_format = [image[(len(image) - 4):] for image in os.listdir(images_folder_path)]
 
-        for image in list_images:
-            self.P_MakePdf(image, images_folder_path, pdfs_folder_path) 
-            print(f'{f"{image[:-4]}.pdf"} sucessfully made! > P_MakePDFS')
+        list_images.sort(key=int)
+
+        for image, format in zip(list_images, list_images_format):
+            self.P_MakePdf(image + format, images_folder_path, pdfs_folder_path) 
+            print(f'{f"{image}.pdf"} sucessfully made! > P_MakePDFS')
         print('--------------------------------------------------------')
 
     @staticmethod
@@ -83,14 +85,16 @@ class Solo():
         """
         """
         os.chdir(pdfs_folder_path)
-        pdfs = os.listdir()
+        int_pdfs = [pdf[:-4] for pdf in os.listdir()]
+
+        int_pdfs.sort(key=int)
 
         merger = PdfFileMerger()
 
-        for pdf in pdfs:
+        for pdf in int_pdfs:
             if not path.isdir(path.join(pdfs_folder_path, pdf)):
-                print(f'{pdf} is merged with {filename}')
-                merger.append(pdf)
+                print(f'{pdf}.pdf is merged with {filename}')
+                merger.append(pdf+'.pdf')
         print('--------------------------------------------------------')
 
         merger.write(filename + '.pdf')
