@@ -1,14 +1,11 @@
-"""
-    Summary
 
-"""
 
 # * Imports
 from cryptography.fernet import Fernet
 import os
 import FolderTree
 
-rootdir = 'C:/Users/udit kumar/Desktop/Coding & Bowsers/Python Codes/Projects/Password Manager/Database'
+rootdir = 'E:\Coding & Bowsers\Python Codes\Projects\Password Manager\Database'
 
 os.chdir(rootdir)
 
@@ -255,8 +252,7 @@ def Load_Passwords(pre_folder=[]):
     """
 
     # ? Using the folderTree file to get the list of file available in the database folder and storing this list
-    pre_folder = FolderTree.PrintFolderTree(
-        rootdir) if pre_folder == [] else pre_folder
+    pre_folder = FolderTree.PrintFolderTree(rootdir) if pre_folder == [] else pre_folder
 
     if 'Master_password.key' in pre_folder:
         # * Removing the master password and secret key from this list
@@ -313,4 +309,4 @@ def MainLoop():
 
 
 if __name__ == "__main__":
-    MainLoop()
+	MainLoop()

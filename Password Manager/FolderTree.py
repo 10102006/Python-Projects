@@ -26,7 +26,7 @@ ex:
 import os
 from os import path
 
-rootdir = "C:/Users/udit kumar/Desktop/Coding & Bowsers/Python Codes/Projects/_Notes Apps/Database"
+rootdir = "E:\Coding & Bowsers\Python Codes\Projects\Password Manager\Database"
 # @ Defining
 
 
