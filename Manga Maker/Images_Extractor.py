@@ -9,7 +9,7 @@ import requests as rq
 import os
 
 # * Defining
-url = 'https://w11.tenseishitaraslimedattaken-manga.com/manga/tensei-shitara-slime-datta-ken-chapter-28/'
+url = 'https://schools.aglasem.com/23036'
 
 def ExtractPanels(url, images_folder_path, commonlink=''):
     """

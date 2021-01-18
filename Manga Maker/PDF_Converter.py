@@ -13,7 +13,7 @@ from PyPDF2 import PdfFileMerger
 
 # * Defining
 images_path = path.join('F://NP DATA BACKUP\Mangas\Images/')
-pdfs_path = path.join('F://NP DATA BACKUP\Mangas/PDFS/We_Never_Learn_Chapter_1/')
+pdfs_path = path.join('F://NP DATA BACKUP\Mangas/PDFS/')
 
 class Main():
     """
@@ -73,7 +73,10 @@ class Solo():
         list_images = [image[:-4] for image in os.listdir(images_folder_path)]
         list_images_format = [image[(len(image) - 4):] for image in os.listdir(images_folder_path)]
 
-        list_images.sort(key=int)
+        try:
+            list_images.sort(key=int)
+        except:
+            pass
 
         for image, format in zip(list_images, list_images_format):
             self.P_MakePdf(image + format, images_folder_path, pdfs_folder_path) 
@@ -120,4 +123,4 @@ class Solo():
 if __name__ == "__main__":
     converter = Solo()
     converter.P_MakePdfs(images_path, pdfs_path)
-    converter.P_Pdfs_Merger(pdfs_path, 'Chapter 128')
+    # converter.P_Pdfs_Merger(pdfs_path, 'NTSE_2013')
