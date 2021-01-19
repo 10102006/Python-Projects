@@ -92,12 +92,13 @@ class Solo():
     
     def D_MakePdf(self, pdf_folder_path, image_name):
         """
-        What is done:
-            1. Opening the image with PIL module
-            2. Then converting the image into RGB format
-            3. We will make a name for the file using f-string
-            4. 
+            What is done:
+                1. Opening the image with PIL module
+                2. Then converting the image into RGB format
+                3. We will make a name for pdf file using f-string
+                4. The we will make a path for that pdf file then we will save that pdf file
         """
+
         image_object = Image.open(path.join(self.image_folder_path, image_name))
         image = image_object.convert('RGB')
 
@@ -109,8 +110,15 @@ class Solo():
         image.save(pdf_image_path)
 
     def P_MakePdfs(self, pdf_folder_path):
-        list_images = [image[:-4] for image in os.listdir(self.images_folder_path)]
-        list_images_format = [image[(len(image) - 4):] for image in os.listdir(self.images_folder_path)]
+        """
+            What is done:
+                1. Making a list of name of images in the image_folder
+                2. Also saving the list of format for simultanious images
+                3. Trying to sort the images list via int number
+                4. Similtaniously looping over both the above list to make pdf via above defined MakePdf
+                    ** Printing success message is pdf is sucessfully made
+        """
+        list_images, list_images_format = [image.rsplit('.') for image in os.listdir(self.images_folder_path)]
 
         try:
             list_images.sort(key=int)
@@ -118,18 +126,46 @@ class Solo():
             pass
 
         for image, format in zip(list_images, list_images_format):
-            self.D_MakePdf(image + format, self.images_folder_path, pdf_folder_path)
-            print(f'{f"{image}.pdf"} sucessfully made! > P_MakePDFS')
+            try:
+                self.D_MakePdf(image + format, self.images_folder_path, pdf_folder_path)
+                pass
+            except Exception  as exception:
+                print(f'{f"{image}.pdf"} unsucessfull, error! > MakePDFS')
+                print(exception)
+            else:
+                print(f'{f"{image}.pdf"} sucessfully made! > MakePDFS')
+                
         print('--------------------------------------------------------')
 
     @staticmethod
-    def D_Pdfs_Merger(pdf_folder_path, filename):
+    def D_Pdfs_Merger(pdf_folder_path, filename, removePdfs=False):
         """
+            What is done:
+                1. Changing the directories for conveniences
+                2. Storting the names of the pdfs in the folder-path
+                3. Storting the the pdfs with int format is it can be done
+                4. Initialising the a merger from the PYPDF2 module
+                5. Looping through all the pdf names(files):
+                    1. Confirming is it a file or not
+                    2. If yes the adding the file to the merger
+                    3. And printing success message
+                6. After all the pages are added to the pdf the intiliasing the file
+                    ** Printing a success message
+                7. Storing all the images name in a list
+                8. Removing all the images files from the images-folder
+                    ** Printing al remove statement
+
+            Extra:
+                9. We can also the pdf files if need
+                
         """
         os.chdir(pdf_folder_path)
         int_pdfs = [pdf[:-4] for pdf in os.listdir()]
 
-        int_pdfs.sort(key=int)
+        try:
+            int_pdfs.sort(key=int)
+        except:
+            pass
 
         merger = PdfFileMerger()
 
@@ -137,6 +173,8 @@ class Solo():
             if not path.isdir(path.join(pdf_folder_path, pdf)):
                 print(f'{pdf}.pdf is merged with {filename}')
                 merger.append(pdf+'.pdf')
+            else:
+                print(f'The directory {pdf} is not a file!')
         print('--------------------------------------------------------')
 
         merger.write(filename + '.pdf')
@@ -144,7 +182,6 @@ class Solo():
 
         print(f'{filename} sucessfully made!')
         print('--------------------------------------------------------')
-        
 
         list_images = os.listdir(images_path)
 
@@ -153,10 +190,12 @@ class Solo():
             print(f'{image} sucessfully removed!')
         print('--------------------------------------------------------')
 
-        # for pdf in pdfs:
-        #     os.remove(f'{pdfs_path}{pdf}')
-        #     print(f'{pdf} sucessfully removed!')
-        # print('--------------------------------------------------------')
+        if removePdfs:
+            list_pdfs = os.listdir(pdf_folder_path)
+            for pdf in list_pdfs:
+                os.remove(f'{pdfs_path}{pdf}')
+                print(f'{pdf} sucessfully removed!')
+            print('--------------------------------------------------------')
 
 
 # ? Implementation
