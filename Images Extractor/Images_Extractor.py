@@ -1,5 +1,12 @@
 """
-  Overview >
+  Overview
+
+What is done:
+    1. Importing
+        1. beautiful-soup for accessing web
+        2. Request for getting the json and images
+        3. os for saving the images in a certain location
+    
 
 """
 
@@ -55,4 +62,4 @@ def Extract_Print_Panels(url):
 
 # ? Implementation
 if __name__ == "__main__":
-    Extract_Print_Panels(url)
+    pass
