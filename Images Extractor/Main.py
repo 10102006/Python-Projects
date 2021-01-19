@@ -9,8 +9,8 @@ from PDF_Converter import Solo
 import os
 
 
-images_path = 'F://NP DATA BACKUP\Mangas/Images/'
-pdfs_path = 'F://NP DATA BACKUP\Mangas/PDFS/'
+images_folder_path = 'F://NP DATA BACKUP\Mangas/Images/'
+pdf_folder_path = 'F://NP DATA BACKUP\Mangas/PDFS/'
 
 # * Defining
 
@@ -21,25 +21,25 @@ def ExctractSeries(main_url, series_name, extra_chapters=[], endingChapter=1, st
 
   if type(extra_chapters) is str:
       manga_chapter_name = f'{series_name}_Chapter_{extra_chapters}'
-      pdfs_folder_path = os.path.join(pdfs_path, manga_chapter_name)
+      pdfs_folder_path = os.path.join(pdf_folder_path, manga_chapter_name)
 
       link = f'{main_url}{extra_chapters}'
 
       try:
-        ExtractPanels(link, images_path)
+        ExtractPanels(link, images_folder_path)
 
-        os.chdir(pdfs_path)
+        os.chdir(pdf_folder_path)
         os.mkdir(manga_chapter_name)
         os.chdir(pdfs_folder_path)
 
-        converter = Solo()
+        converter = Solo(images_folder_path, pdf_folder_path)
 
         print('-----------------------------------------')      
-        converter.P_MakePdfs(images_folder_path=images_path, pdfs_folder_path=pdfs_folder_path)
+        converter.P_MakePdfs(pdfs_folder_path=pdfs_folder_path)
 
         print('Files made into pdfs!')
 
-        converter.P_Pdfs_Merger(pdfs_folder_path, manga_chapter_name)  
+        converter.D_Pdfs_Merger(pdfs_folder_path, manga_chapter_name)
 
       except Exception as exception:
         print(exception)
@@ -50,19 +50,19 @@ def ExctractSeries(main_url, series_name, extra_chapters=[], endingChapter=1, st
 
       for chapter_index, links  in enumerate(list_manga_links, startingChapter):
         manga_chapter_name = f'{series_name}_Chapter_{chapter_index}'
-        pdfs_folder_path = os.path.join(pdfs_path, manga_chapter_name)
+        pdfs_folder_path = os.path.join(pdf_folder_path, manga_chapter_name)
 
         try:
-          ExtractPanels(links, images_path)
+          ExtractPanels(links, images_folder_path)
 
-          os.chdir(pdfs_path)
+          os.chdir(pdf_folder_path)
           os.mkdir(manga_chapter_name)
           os.chdir(pdfs_folder_path)
 
           converter = Solo()
 
           print('-----------------------------------------')      
-          converter.P_MakePdfs(images_folder_path=images_path, pdfs_folder_path=pdfs_folder_path)
+          converter.P_MakePdfs(images_folder_path=images_folder_path, pdfs_folder_path=pdfs_folder_path)
 
           print('Files made into pdfs!')
 
