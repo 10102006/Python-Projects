@@ -144,6 +144,7 @@ class Solo():
 
         print(f'{filename} sucessfully made!')
         print('--------------------------------------------------------')
+        
 
         list_images = os.listdir(images_path)
 
