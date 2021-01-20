@@ -8,7 +8,6 @@ from Images_Extractor import ExtractPanels
 from PDF_Converter import Solo
 import os
 
-
 images_folder_path = 'F://NP DATA BACKUP\Mangas/Images/'
 pdf_folder_path = 'F://NP DATA BACKUP\Mangas/PDFS/'
 

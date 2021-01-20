@@ -14,22 +14,25 @@ What is done:
 from bs4 import *
 import requests as rq
 import os
+from Similar_String import Common_Strings
+
 
 # * Defining
 url = 'https://schools.aglasem.com/23036'
 
-def ExtractPanels(url, images_folder_path, commonlink=''):
+def ExtractPanels(url, images_folder_path):
     """
     """
     r2 = rq.get(url)
     soup2 = BeautifulSoup(r2.text, "html.parser")
 
     links = []
-
-    x = soup2.select(f'img[src^={commonlink}]' if commonlink else 'img[src]')
+    
+    x = soup2.select(f'img[src^={CommonInLink(url)}]' if CommonInLink(url) else 'img[src]')
 
     for img in x:
         links.append(img['src'])
+
 
     os.chdir(images_folder_path)
 
@@ -43,7 +46,7 @@ def ExtractPanels(url, images_folder_path, commonlink=''):
         except:
             pass
 
-def Extract_Print_Panels(url):
+def CommonInLink(url):
     """
     """
     pass
@@ -57,8 +60,7 @@ def Extract_Print_Panels(url):
     for img in x:
         links.append(img['src'])
 
-    for link in links:
-        print(link)
+    return Common_Strings(links)
 
 # ? Implementation
 if __name__ == "__main__":
