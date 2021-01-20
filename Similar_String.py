@@ -28,7 +28,6 @@ def Common_Strings(list_string):
             2. If the char are equal then we will be continuing
             3. Else breaking the loop
             4. We will store all the char in a list
-        3. 
     """
     newlist = [list(string) for string in list_string]
     compared = []
@@ -50,6 +49,6 @@ def Common_Strings(list_string):
 
 # ? Implementation
 if __name__ == "__main__":
-    lst = ['Udit is a good boy', 'dit-genius', 'UditBuffaloface', 'Udit damned human']
+    lst = ['Udit is a good boy', 'Udit-genius', 'UditBuffaloface', 'Udit damned human']
     cp = Common_Strings(lst)
     print(cp)
