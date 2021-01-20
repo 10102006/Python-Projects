@@ -45,7 +45,7 @@ def Common_Strings(list_string):
     elif compared[0] == '':
         print("Similarities not found")
     else:
-        Common_Strings(compared)			 
+        Common_Strings(compared)
 
 
 # ? Implementation
