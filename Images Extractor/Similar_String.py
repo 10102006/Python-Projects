@@ -1,5 +1,12 @@
 """
-  Overview>
+  Overview
+
+What is done:
+    1. CheckList:
+        ** This function will check if all the items the given list are same or not
+    2. Common_String:
+        ** Main function this will return the common attribute in two or more string which must be passed by a list
+        ** This will also check if there are any common attributes or not
 
 """
 
@@ -7,17 +14,25 @@
 
 # * Defining
 
-def CheckList(lst): 
-	ele = lst[0] 
-	chk = True
+
+def CheckList(lst):
+    """
+      What is done:
+        1. Obtaining the first element of the list for comparision
+        2. check is the variable which we will return, it will True by default
+        3. Then looping through
+        
+    """
+    first_element = lst[0] 
+    check = True
 	
-	# * Comparing each element with first item 
-	for item in lst: 
-		if ele != item: 
-			chk = False
-			break; 
-			
-	return chk
+	# * Comparing each element with first item
+    for item in lst: 
+        if first_element != item: 
+            check = False
+            break; 
+    return check
+
 
 def Common_Strings(list_string):
     """
@@ -52,3 +67,4 @@ if __name__ == "__main__":
     lst = ['Udit is a good boy', 'Udit-genius', 'UditBuffaloface', 'Udit damned human']
     cp = Common_Strings(lst)
     print(cp)
+
