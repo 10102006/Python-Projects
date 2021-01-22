@@ -98,7 +98,6 @@ class Solo():
                 3. We will make a name for pdf file using f-string
                 4. The we will make a path for that pdf file then we will save that pdf file
         """
-
         image_object = Image.open(path.join(self.image_folder_path, image_name))
         image = image_object.convert('RGB')
 
@@ -109,7 +108,7 @@ class Solo():
 
         image.save(pdf_image_path)
 
-    def P_MakePdfs(self, pdf_folder_path):
+    def D_MakePdfs(self, pdf_folder_path):
         """
             What is done:
                 1. Making a list of name of images in the image_folder
@@ -118,27 +117,28 @@ class Solo():
                 4. Similtaniously looping over both the above list to make pdf via above defined MakePdf
                     ** Printing success message is pdf is sucessfully made
         """
-        list_images, list_images_format = [image.rsplit('.') for image in os.listdir(self.images_folder_path)]
+        list_images = [image[:-4] for image in os.listdir(self.image_folder_path)]
 
         try:
             list_images.sort(key=int)
         except:
             pass
 
-        for image, format in zip(list_images, list_images_format):
+        for image in list_images:
             try:
-                self.D_MakePdf(image + format, self.images_folder_path, pdf_folder_path)
-                pass
+                self.D_MakePdf(pdf_folder_path, image + '.jpg')
+
             except Exception  as exception:
                 print(f'{f"{image}.pdf"} unsucessfull, error! > MakePDFS')
                 print(exception)
+
             else:
                 print(f'{f"{image}.pdf"} sucessfully made! > MakePDFS')
                 
         print('--------------------------------------------------------')
 
     @staticmethod
-    def D_Pdfs_Merger(pdf_folder_path, filename, removePdfs=False):
+    def D_Pdfs_Merger(pdf_folder_path, filename, removePdfs=False, removeImages=True):
         """
             What is done:
                 1. Changing the directories for conveniences
@@ -185,10 +185,11 @@ class Solo():
 
         list_images = os.listdir(images_path)
 
-        for image in list_images:
-            os.remove(f'{images_path}{image}')
-            print(f'{image} sucessfully removed!')
-        print('--------------------------------------------------------')
+        if removeImages:
+            for image in list_images:
+                os.remove(f'{images_path}{image}')
+                print(f'{image} sucessfully removed!')
+            print('--------------------------------------------------------')
 
         if removePdfs:
             list_pdfs = os.listdir(pdf_folder_path)
@@ -200,7 +201,6 @@ class Solo():
 
 # ? Implementation
 if __name__ == "__main__":
-    # converter = Solo()
-    # converter.D_MakePdfs(images_path, pdfs_path)
-    # converter.P_Pdfs_Merger(pdfs_path, 'NTSE_2013')
-    pass
+    converter = Solo(images_path, pdfs_path)
+    converter.D_MakePdfs(pdfs_path)
+    converter.D_Pdfs_Merger(pdfs_path, 'Seven Deadly Sins', removeImages=False)

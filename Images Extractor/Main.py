@@ -1,5 +1,8 @@
 """
-  Overview>
+  Overview
+
+What is done:
+  1. 
 
 """
 
@@ -16,8 +19,9 @@ pdf_folder_path = 'F://NP DATA BACKUP\Mangas/PDFS/'
 def ExctractSeries(main_url, series_name, extra_chapters=[], endingChapter=1, startingChapter=0):
   """
   """
-  list_manga_links = [f'{main_url[:-1]}{index + startingChapter + 1}/' for index in range(endingChapter - 1)]
+  list_manga_links = [f'{main_url[:-1]}{index + startingChapter + 1}/' for index in range(endingChapter - startingChapter - 1)]
 
+  # * If we need to recover only one chapter of manga hence extra_chapters in in string
   if type(extra_chapters) is str:
       manga_chapter_name = f'{series_name}_Chapter_{extra_chapters}'
       pdfs_folder_path = os.path.join(pdf_folder_path, manga_chapter_name)
@@ -34,7 +38,7 @@ def ExctractSeries(main_url, series_name, extra_chapters=[], endingChapter=1, st
         converter = Solo(images_folder_path, pdf_folder_path)
 
         print('-----------------------------------------')      
-        converter.P_MakePdfs(pdfs_folder_path=pdfs_folder_path)
+        converter.D_MakePdfs(pdfs_folder_path=pdfs_folder_path)
 
         print('Files made into pdfs!')
 
@@ -44,6 +48,7 @@ def ExctractSeries(main_url, series_name, extra_chapters=[], endingChapter=1, st
         print(exception)
         print(link)
 
+  # * This for multiple chapters of the manga extra_chapters will be empty hence no extra chapters will be added
   elif type(extra_chapters) is list:
       list_manga_links.extend(extra_chapters)
 
@@ -58,14 +63,14 @@ def ExctractSeries(main_url, series_name, extra_chapters=[], endingChapter=1, st
           os.mkdir(manga_chapter_name)
           os.chdir(pdfs_folder_path)
 
-          converter = Solo()
+          converter = Solo(images_folder_path, pdf_folder_path)
 
           print('-----------------------------------------')      
-          converter.P_MakePdfs(images_folder_path=images_folder_path, pdfs_folder_path=pdfs_folder_path)
+          converter.D_MakePdfs(pdfs_folder_path)
 
           print('Files made into pdfs!')
 
-          converter.P_Pdfs_Merger(pdfs_folder_path, manga_chapter_name)  
+          converter.D_Pdfs_Merger(pdfs_folder_path, manga_chapter_name)  
 
         except Exception as exception:
           print(exception)
@@ -74,6 +79,6 @@ def ExctractSeries(main_url, series_name, extra_chapters=[], endingChapter=1, st
 
 # ? Implementation
 if __name__ == "__main__":
-  url = 'https://schools.aglasem.com/'
-  ExctractSeries(url,'NTSE_2013', '23036')
+  url = 'https://seven-deadlysins-manga.com/manga/seven-deadly-sins-chapter-/'
+  ExctractSeries(url,'Seven Deadly Sin', startingChapter=25, endingChapter=40)
 

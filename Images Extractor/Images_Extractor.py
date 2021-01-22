@@ -18,7 +18,8 @@ from Similar_String import Common_Strings
 
 
 # * Defining
-url = 'https://schools.aglasem.com/23036'
+url = 'https://seven-deadlysins-manga.com/manga/seven-deadly-sins-chapter-26/'
+images_folder_path = 'F://NP DATA BACKUP\Mangas\Images'
 
 def ExtractPanels(url, images_folder_path):
     """
@@ -41,7 +42,8 @@ def ExtractPanels(url, images_folder_path):
 
     images_links = []
     
-    images_data = soup.select(f'img[src^={CommonInLink(url)}]' if CommonInLink(url) else 'img[src]')
+    # images_data = soup.select(f'img[src^={CommonInLink(url)}]' if CommonInLink(url) else 'img[src]')
+    images_data = soup.select('img[src]')
 
     for image in images_data:
         images_links.append(image['src'])
@@ -78,4 +80,4 @@ def CommonInLink(url):
 
 # ? Implementation
 if __name__ == "__main__":
-    ExtractPanels(url)
+    ExtractPanels(url, images_folder_path)
