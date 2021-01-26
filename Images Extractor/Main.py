@@ -79,6 +79,10 @@ def ExctractSeries(main_url, series_name, extra_chapters=[], endingChapter=1, st
 
 # ? Implementation
 if __name__ == "__main__":
-  url = 'https://seven-deadlysins-manga.com/manga/seven-deadly-sins-chapter-/'
-  ExctractSeries(url,'Seven Deadly Sin', startingChapter=25, endingChapter=40)
+  # https://seven-deadlysins-manga.com/manga/seven-deadly-sins-chapter-/
+  url = input('Enter M- Url: ')
+  extra_chapter = input('Enter Extra chapter: ')
+  starting_chapter = int(input('Starting Chapter: '))
+  ending_chapter = int(input('Ending Chapter: '))
+  ExctractSeries(url,'Seven Deadly Sin', extra_chapters=extra_chapter if extra_chapter else [],startingChapter=starting_chapter, endingChapter=ending_chapter)
 
