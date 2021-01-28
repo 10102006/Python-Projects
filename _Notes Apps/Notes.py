@@ -14,14 +14,15 @@ What to do:
 # * Imports
 import os
 from os import path
-from typing import Counter
 import FolderTree
 
 # @ Here I am storing the root and database path
 rootdir = os.getcwd()
+
+# * Root of the database folder
 databasedir = path.join(rootdir, "Projects\_Notes Apps\Database")
 
-# ? Changing to the database path
+# ? Changing to the database path for convieninces
 os.chdir(databasedir)
 
 
