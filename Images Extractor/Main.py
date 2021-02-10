@@ -16,7 +16,7 @@ pdf_folder_path = 'F://NP DATA BACKUP\Mangas/PDFS/'
 
 # * Defining
 
-def ExctractSeries(main_url, series_name, extra_chapters=[], endingChapter=1, startingChapter=0):
+def ExctractSeries(main_url, series_name, extra_chapters=[], endingChapter=1, startingChapter=0, mode=0):
   """
   """
   list_manga_links = [f'{main_url[:-1]}{index + startingChapter + 1}/' for index in range(endingChapter - startingChapter - 1)]
@@ -84,5 +84,6 @@ if __name__ == "__main__":
   extra_chapter = input('Enter Extra chapter: ')
   starting_chapter = int(input('Starting Chapter: '))
   ending_chapter = int(input('Ending Chapter: '))
-  ExctractSeries(url,'Seven Deadly Sin', extra_chapters=extra_chapter if extra_chapter else [],startingChapter=starting_chapter, endingChapter=ending_chapter)
+  chapter_name = input('Chapter name: ')
+  ExctractSeries(url, chapter_name, extra_chapters=extra_chapter if extra_chapter else [],startingChapter=starting_chapter, endingChapter=ending_chapter)
 

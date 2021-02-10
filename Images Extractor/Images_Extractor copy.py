@@ -21,7 +21,7 @@ from Similar_String import Common_Strings
 
 images_folder_path = 'F://NP DATA BACKUP\Mangas\Images'
 
-def ExtractPanels(url, images_folder_path, index_t=''):
+def ExtractPanels(url, images_folder_path, starting, ending):
     """
         What is done:
             1. Obtaining webpage data in JSON format using requests module
@@ -37,30 +37,31 @@ def ExtractPanels(url, images_folder_path, index_t=''):
                 4. And saving the image in jpg format
                 ** printing success message
     """
-    webpage_object = request.get(url)
-    soup = BeautifulSoup(webpage_object.text, "html.parser")
+    for number in range(starting, ending):
+        webpage_object = request.get(f'{url[:-1]}{number}/')
+        soup = BeautifulSoup(webpage_object.text, "html.parser")
 
-    images_links = []
-    
-    # images_data = soup.select(f'img[src^={CommonInLink(url)}]' if CommonInLink(url) else 'img[src]')
-    images_data = soup.select('img[src]')
+        images_links = []
+        
+        # images_data = soup.select(f'img[src^={CommonInLink(url)}]' if CommonInLink(url) else 'img[src]')
+        images_data = soup.select('img[src]')
 
-    for image in images_data:
-        images_links.append(image['src'])
+        for image in images_data:
+            images_links.append(image['src'])
 
-    os.chdir(images_folder_path)
+        os.chdir(images_folder_path)
 
-    for index, image_link in enumerate(images_links, 1):
-        try:
-            image_data = request.get(image_link).content
+        for index, image_link in enumerate(images_links, 1):
+            try:
+                image_data = request.get(image_link).content
 
-            with open(f'{index}.jpg', 'wb+') as f:
-                print(f'panel_{index if not index_t else index_t}.jpg sucessfully made! > Extractor')
-                f.write(image_data)
+                with open(f'{number}.jpg', 'wb+') as f:
+                    print(f'panel_{index}.jpg sucessfully made! > Extractor')
+                    f.write(image_data)
 
-        except Exception as exception:
-            print(exception)
-            print(f'{image_link} > Images_Extractor')
+            except Exception as exception:
+                print(exception)
+                print(f'{image_link} > Images_Extractor')
 
 def CommonInLink(url):
     """
@@ -80,6 +81,5 @@ def CommonInLink(url):
 
 # ? Implementation
 if __name__ == "__main__":
-    for number in range(1, 50):
-        url = f'https://mangaonepiece.com/manga/one-piece-chapter-0-romance-dawn/{number}/'
-        ExtractPanels(url, images_folder_path)
+    url = f'https://mangaonepiece.com/manga/one-piece-chapter-0-romance-dawn//'
+    ExtractPanels(url, images_folder_path, 1, 50)

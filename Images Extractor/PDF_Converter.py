@@ -203,4 +203,4 @@ class Solo():
 if __name__ == "__main__":
     converter = Solo(images_path, pdfs_path)
     converter.D_MakePdfs(pdfs_path)
-    converter.D_Pdfs_Merger(pdfs_path, 'Seven Deadly Sins', removeImages=False)
+    converter.D_Pdfs_Merger(pdfs_path, 'One Piece')
