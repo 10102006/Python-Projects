@@ -79,14 +79,79 @@ class Main():
             data = pickle.load(file)
             return data
 
-class CMD():
+class CMD(Main):
     """
     """
-    pass
+    @staticmethod
+    def GenerateList():
+        """
+        """
+        t_list = []
+        while True:
+            item = input('> ')
+            if item:
+                t_list.append(item)
+            else:
+                break
+        return t_list
+
+    @staticmethod
+    def ChooseItemFromList(given_list):
+        """
+        """
+        for index, item in enumerate(given_list, 1):
+            print(f'{index}. {item}')
+        item_index = input('Enter index of the item: ')
+
+        if item_index.isnumeric():
+            item = given_list[int(item_index) - 1]
+
+            return item
+
+    def MakeList(self):
+        """
+        """
+        name = input('Enter name of list: ')
+        description = input("Enter list description: ")
+        notes = self.GenerateList()
+
+        list_obj = Main.MakeList(name, description, notes)
+        Main.PublishList(list_obj)
+        return list_obj
+
+    def EditList(self, database_path):
+        """
+        """
+        os.chdir(database_path)
+        lists = os.listdir(database_path)
+
+        list_name = self.ChooseItemFromList(lists)
+
+        print(list_name)
+
+        list_obj = Main.RetrieveList(list_name[:-4])
+
+        what_to_edit = input('What do you what to edit(1:name, 2:description, 3:notes): ')
+        print('------------------------------------------')
+        if what_to_edit == '3':
+            edit_obj = self.GenerateList()
+        else:
+            edit_obj = input(f'Enter {"name" if what_to_edit == "1" else "description"} of the list: ')
+
+        Main.EditList(list_obj, edit_obj, what_to_edit, True)
 
 # ? Implementation
 if __name__ == "__main__":
     pass
+
+    main = Main()
+    cmd = CMD()
+
+    # t_list = cmd.MakeList()
+    # print(t_list)
+
+    # cmd.EditList(Mpath)
+    
     # t_list = MakeList('Test', 'test-I')
 
     # print(t_list)
