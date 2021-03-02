@@ -1,11 +1,10 @@
-"""
-  SUMMARY
-"""
 
 # * Imports
 import random
 
-def MakeBoard(n_row=3, n_column=3,withIndex=False):
+# @ Defination
+
+def MakeBoard(withIndex=False, n_row=3, n_column=3):
     """
     What is done:
         1. Making a temporary list as the main-board list
@@ -24,8 +23,8 @@ def MakeBoard(n_row=3, n_column=3,withIndex=False):
 
     # @ Since we need three rows the iteration will loop three times
     for _ in range(n_row):
-        # @ This will make a list if the indexing is required else we will continue with the empty cells
 
+        # @ This will make a list if the indexing is required else we will continue with the empty cells
         cells = [f'{index + rowIndex}' if withIndex else ' ' for index in range(n_column)]
 
         # ? Appending the above formed list
@@ -35,16 +34,7 @@ def MakeBoard(n_row=3, n_column=3,withIndex=False):
     # ? Returing the list
     return t_list
 
-# @ Defination
-
-# @ Making a primary board for the operation
-Board = MakeBoard()
-
-# * This will required to change the turn of the player
-SwitchTurn = lambda turn: 'X' if turn == 'O' else 'O'
-
-
-def PrintBoard(boardObj=Board):
+def PrintBoard(boardObj=MakeBoard()):
     """
     What is done:
         1. We are looping the 2D list
@@ -59,7 +49,7 @@ def PrintBoard(boardObj=Board):
             print(f'[{value}]', end=' ')
         print('')
 
-def ChangeCell(rowindex=0, columnindex=0, turn=' ',coordinate=(), boardObj=Board):
+def ChangeCell(boardObj, rowindex=0, columnindex=0, turn=' ',coordinate=()):
     """
     What is done:
         1. The rowindex and columnindex can used seperately if need we just need to decrease the value by 1 to get the correct numeration
@@ -73,8 +63,8 @@ def ChangeCell(rowindex=0, columnindex=0, turn=' ',coordinate=(), boardObj=Board
         7. For further precaution we will be returning an bool to cofirm the status of cell change if the cell is not changed then the turn must not be taken
     """
     # ? Modificing the rowindex and columnindex to be compatable
-    rowindex = coordinate[0] if coordinate else rowindex - 1
-    columnindex = coordinate[1] if coordinate else columnindex - 1
+    rowindex = int(coordinate[0] if coordinate else rowindex) - 1
+    columnindex = int(coordinate[1] if coordinate else columnindex) - 1
 
     # ? Obtaining and removing the cell which is to be change
     cellvalue = boardObj[rowindex].pop(columnindex)
@@ -105,13 +95,13 @@ def GetCoordinates(cellIndex):
         for columnIndex, value in enumerate(boxRow) :
             # * Checking if the values of the cell (index) if equal to the asked index
             if value == str(cellIndex):
-                return (rowIndex, columnIndex)
+                return (rowIndex + 1, columnIndex + 1)
 
-def Won(boardObj=Board):
+def Won(boardObj):
     """
     What is done:
-        1. Making a function to check if the cell values of certain index's of cell were eqal => See the function for further under standing
-        2. Generating the possible wining states
+        1. Making a function to check if the cell values of certain index's of cell were equal => See the function for further understanding
+        2. Generating the possible winning states
             ** These will contain the config of index which can be said to be a victory
         3. Looping through all the winning configaration if and config is true then we will return true
         4. But if the loop has ended and there if no config available then we will return false
@@ -127,18 +117,19 @@ def Won(boardObj=Board):
             5. Checking if the cell values are equal using the euler axiom
             6. If all the condition are met then returing true
         """
+        
         # ? Storing the coordinate tuple using the GetCoordinates() method
         coord1 = GetCoordinates(winstate[0])
         coord2 = GetCoordinates(winstate[1])
         coord3 = GetCoordinates(winstate[2])
 
         # @ Using tuple splicing obtaing the rowindex and columnindex of the cell
-        cell1 = boardObj[coord1[0]][coord1[1]]
-        cell2 = boardObj[coord2[0]][coord2[1]]
-        cell3 = boardObj[coord3[0]][coord3[1]]
+        cell1 = boardObj[coord1[0] - 1] [coord1[1] - 1]
+        cell2 = boardObj[coord2[0] - 1] [coord2[1] - 1]
+        cell3 = boardObj[coord3[0] - 1] [coord3[1] - 1]
 
         # * Checking logic
-        if cell1 != ' ' or cell2 != ' ' or cell3 != ' ':
+        if cell1 != ' ':
             if cell1 == cell2 and cell2 == cell3:
                     return True
 
@@ -188,7 +179,7 @@ def OneGame(boardObj):
     turn = ['X', 'O'][random.randint(0, 1)]
 
     # ? Printing the indexed board for reference
-    PrintBoard(MakeBoard(True))
+    PrintBoard(MakeBoard(withIndex=True))
 
     print('----------------------------------------------------------------------')
 
@@ -244,9 +235,8 @@ def OneGame(boardObj):
 
 def FullGame(score=[0, 0]):
     """
-    This will contain the score counting mechanism as well as forever game loop
-    What is done:
-        1. We wil running this loop forever meaning we can play the game as much as we want
+    What is done: 
+        1. We wil running this loop forever meaning we can play the game as much as we want 
         2. Main loop:
             1. Playing a game using the OneGame() method
             2. And storing the winners name
@@ -276,7 +266,7 @@ def FullGame(score=[0, 0]):
         print(f'Score- X : {score[0]} / O : {score[1]}')
         print('----------------------------------------------------------------------')
     print(f'Score- X : {score[0]} / O : {score[1]}')
-
+ 
 def GenerateWinStates(n_rows=3, n_columns=3):
     """
     """
@@ -317,6 +307,20 @@ def GenerateWinStates(n_rows=3, n_columns=3):
 
 # ? Implementation
 
-if __name__ == "__main__":
-    FullGame()
+# * This will required to change the turn of the player
+SwitchTurn = lambda turn: 'X' if turn == 'O' else 'O'
 
+if __name__ == "__main__":
+    # board = MakeBoard()
+    # ChangeCell(board, 1, 1, 'x')
+    # ChangeCell(board, 2, 2, 'o')
+    # ChangeCell(board, 3, 3, 'x')
+
+    # PrintBoard(board)
+
+    # coord = GetCoordinates(1)
+
+    # print(Won(board))
+
+    FullGame()
+    
