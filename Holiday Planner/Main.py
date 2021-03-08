@@ -334,7 +334,6 @@ class File_State():
                     ratings = file.readline()[:-1]
                     price_of_stay = file.readline()
 
-
                     # ? Splicing the filename so (.txt) is removed
                     file_name = file_name[:-4]
                     # @ Making the attributes of the hotel in the hotel
@@ -569,7 +568,8 @@ class CLI(Dict_State):
 
         return ticket_obj
 
-    def Print_Ticket(self, ticket):
+    @staticmethod
+    def Print_Ticket(ticket):
         """
         """
         ticket_line = f'{"-" * 90}'
@@ -618,7 +618,6 @@ if __name__ == "__main__":
     cli = CLI(Database)
     init = Dict_State()
     file = File_State('E:\Coding & Bowsers\Python Codes\Projects\Holiday Planner\Database')
-
 
    # ? Trial
     Karnataka = file.Retrieve_State('E:\Coding & Bowsers\Python Codes\Projects\Holiday Planner\Database', 'Karnataka')
