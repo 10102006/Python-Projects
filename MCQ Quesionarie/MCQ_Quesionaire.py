@@ -40,13 +40,50 @@ Things Done:
 # * Imports
 import os
 from os import path
+import pickle
+
 
 rootdir = os.getcwd()
 databasedir = path.join(rootdir, 'MCQ Quesionarie\Database')
 
+
 # @ Defining
 
 Database = {}
+
+class Pickle():
+    """
+    """
+    def __init__(self, directory):
+            """
+                So this functions makes a class a constructor
+            """
+            self.directory = path.join(directory)
+            os.chdir(directory)
+    
+    def StorePickleFile(data, filename):
+        """
+        What is done:
+            1. filename confirmation this will add the '.pkl' format if the format is not avail
+            2. Then we will make a file with the filename with binary encoding
+            3. When the file is made then we will add the data to the file
+        """
+        filename = filename if '.pkl' in filename else f'{filename}.pkl'
+        with open(filename, 'wb') as file:
+            pickle.dump(data, file)
+
+    def RetrievePickleFile(filename):
+        """
+        What is done:
+            1. Filename confirmation this will add the '.pkl' format if the format is not in the given filename
+            2. Then we will open the file with the given filename in read mode
+            3. Then using the pickle module we will retrieve the data
+            4. We will store this data and return it
+        """
+        filename = filename if '.pkl' in filename else f'{filename}.pkl'
+        with open(filename, 'rb') as file:
+            data = pickle.load(file)
+            return data
 
 class Questionarie:
     @staticmethod
@@ -218,7 +255,7 @@ class Questionarie:
                 print('Incorrect, try again!')
                 print('-----------------------------------------')
 
-class New_Questionarie:
+class New_Questionarie(Pickle):
     @staticmethod
     def MakeQuestion(question, options, answer):
         """
@@ -248,7 +285,6 @@ class New_Questionarie:
         else:
             print('Invaild answer pls check!')
 
-
     @staticmethod
     def SaveQuestion(d_question, fn_question, folder='', shouldMakeFolder=False):
         """
@@ -277,24 +313,19 @@ class New_Questionarie:
         except:
             # ? This is the exception print statement
             print("Folder don't exist! please make the folder via function!")
+
       # @ This will occur when the changing of the dir is done
         finally:
             try:
                 # ? Making file in the database or the specfied folder
-                with open(f'{fn_question}.txt', 'w') as f_question:
-                    pass
-            finally:
-                # ? Opening the file to write in it
-                with open(f'{fn_question}.txt', 'r+') as f_question:
-                    f_question.write(f"{d_question.get('question')} \n")
+                Pickle.StorePickleFile(d_question, fn_question)
 
-                    for option in d_question.get('options'):
-                        f_question.write(f'\n{option}')
-
-                    f_question.write(f"\n\n{d_question.get('answer')}")
+            except Exception as e:
+                print(e)
 
 
-    def RetriveQuestion(self, fn_question, folder=''):
+    @staticmethod
+    def RetriveQuestion(fn_question, folder=''):
         """
             What is done:
                 1. Changing to database directory
@@ -321,33 +352,8 @@ class New_Questionarie:
         except:
             print("Folder don't exist! please make the folder via function!")
 
-        with open(f'{fn_question}.txt', 'r') as f_question:
-            # * This will retrieve the question but the last two char will be left
-            question = (f_question.readline())[:-1]
-
-            # $ this is just a dummy leave
-            f_question.readline()
-
-            # @ This will contain the the options
-            options = []
-
-            # * In this loop we will get the option and also remove the end /n char
-            while True:
-                option = (f_question.readline())[:-1]
-
-                # * This will ensure that if option is empty then we will break out of loop
-                if option:
-                    options.append(option)
-                else:
-                    break
-
-          # @ This readline will get the last line of the file which is the answer
-            answer = f_question.readline()
-
-          # ? This is the dict question which is returned from the MakeQuestion()
-            _question = self.MakeQuestion(question, options, answer)
-            return _question
-
+        d_question = Pickle.RetrievePickleFile(fn_question)
+        return d_question
 
     @staticmethod
     def DisplayQuestion(d_question):
@@ -391,10 +397,12 @@ class New_Questionarie:
 
 # ? Execution
 if __name__ == '__main__':
-    questionaire = Questionarie()
+    questionaire = New_Questionarie(databasedir)
 
-    r_question = questionaire.MakeQuestion('How is Udit?',['Good', 'Bad', 'Fat', 'Old'], 'Good')
+    # r_question = questionaire.MakeQuestion('How is Udit?',['Good', 'Bad', 'Fat', 'Old'], 'Good')
 
     # questionaire.SaveQuestion(r_question, 'nature', 'WhatDoYaThin', True)
     
+    r_question = questionaire.RetriveQuestion('Udit')
     questionaire.DisplayQuestion(r_question)
+

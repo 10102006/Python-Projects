@@ -19,10 +19,6 @@ os.chdir('E:\Coding & Bowsers\Python Codes\Projects\Pickle')
 
 list_data = []
 
-with open('iris.data') as file :
-    while file.readline():
-        list_data.append(file.readline()[:-2])
-
 def StorePickleFile(data, filename):
     """
     What is done:
