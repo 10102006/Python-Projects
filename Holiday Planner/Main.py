@@ -356,7 +356,7 @@ class File_State():
                     2. Loop True so that all the transports are took
                     3. First we will readline() => This is like a generator so this will change each line it recalled
                     4. If the data gathered is empty then that means the all the transports are gathered and the loop will break
-                    5. Splicing the transport to remove the (\n) from the data
+                    5. Splicing the transport to remove the (/n) from the data
                     6. If not then storing the tranport gathered in the prementioned mock transport list
                 3. Gathering the hotels:
                     1. Making path by joining the main tourisplace path and the 'hotel' key word
