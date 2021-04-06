@@ -65,5 +65,5 @@ def TakeCommand():
     return str(query).lower()
 
 # ? Execution
-# if __name__ == "__main__":
-#     WishMe()
+if __name__ == "__main__":
+    WishMe()
