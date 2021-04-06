@@ -81,8 +81,8 @@ class FolderPrettier:
         path = os.path.join(path)
         files = os.listdir()
 
-        for file in files:
-            filenames, format = file.rsplit('.')
+        for _ in files:
+            # filenames, format = file.rsplit('.')
             self.formats.append(format)
 
         return self.formats

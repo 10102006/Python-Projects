@@ -14,10 +14,11 @@ import os
 from os import path
 from FolderTree import FolderTree
 
-_path = path.join('E:\School Stuffs\Academic\Holiday homework winter')
+_path = path.join('F:\\Udit Downloads\\Setups')
 os.chdir(_path)
 
 # @ Defination
+
 def FormatFilenames(folderpath=_path, shouldNumberised=False):
     """
     """
@@ -34,6 +35,7 @@ def FormatFilenames(folderpath=_path, shouldNumberised=False):
             n_filename = f'{index}_{file}'
             os.rename(n_filename)
 
+
 def ExtractFormats(folderpath=_path):
     """
     """
@@ -49,6 +51,7 @@ def ExtractFormats(folderpath=_path):
 
     return formats
 
+
 # ? Implementation
 if __name__ == "__main__":
-  FormatFilenames(shouldNumberised=True)
+    FormatFilenames(shouldNumberised=True)
