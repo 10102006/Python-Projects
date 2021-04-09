@@ -16,21 +16,17 @@ Database = {
 
 Things Done:
     1. MakeQuestion(question, options, answer) =>
-        This will make a dict with the attributes as the params and then it will return the dict.
+        This function will make a dict with the attributes as the params and then it will return the dict => question-object.
 
     2. SaveQuestion(d_question, fn_question, folder, makefolder) =>
-        This will make a file using the dict format from the above function,
-        this can also make a seperate folder with the file inside it
-        This will make the file data in a raw format using the dict values.
+        This will make a file using the question-object from the above function, this can also make a seperate folder with the file inside it. This will make the file data in a raw format using the dict values.
 
     3. RetrieveQuestion(fn_question, folder) => 
         This function will retrieve the raw data from the file made by the above function.
         Then this will make the raw data into a dict which can be stored since that will be returned and added to the database dict
 
     4. DisplayQuestion(_question) => 
-        This function will display the question in the console.
-        But this function need the the question format to display the question
-        * Check bellow how it is made
+        This function will display the question in the console. But this function need the the question format to display the question
 
 '''
 
@@ -48,41 +44,44 @@ databasedir = path.join(rootdir, 'MCQ Quesionarie\Database')
 
 Database = {}
 
+
 class Pickle():
     """
+    This class will be used to store and retrieve the mcq files which is in the dict format
     """
+
     def __init__(self, directory):
-            """
-                So this functions makes a class a constructor
-            """
-            self.directory = path.join(directory)
-            os.chdir(directory)
-    
+        """
+            So this functions makes a class a constructor
+        """
+        self.directory = path.join(directory)
+        os.chdir(directory)
+
     def StorePickleFile(data, filename):
         """
         What is done:
-            1. filename confirmation this will add the '.pkl' format if the format is not avail
-            2. Then we will make a file with the filename with binary encoding
-            3. When the file is made then we will add the data to the file
+            1. filename confirmation: this will add the '.pkl' format if the format is not written.
+            2. Then we will make a file with the filename with binary encoding.
+            3. When the file is made then we will add the data to the file.
         """
         filename = filename if '.pkl' in filename else f'{filename}.pkl'
         with open(filename, 'wb') as file:
             pickle.dump(data, file)
+            print(f"{filename}  is made!")
 
     def RetrievePickleFile(filename):
         """
         What is done:
-            1. Filename confirmation this will add the '.pkl' format if the format is not in the given filename
-            2. Then we will open the file with the given filename in read mode
-            3. Then using the pickle module we will retrieve the data
-            4. We will store this data and return it
+            1. Filename confirmation: this will add the '.pkl' format if the format is not in the given filename.
+            2. Then we will open the file with the given filename in read mode.
+            3. Then using the pickle module we will retrieve the data. We will store this data and return it
         """
         filename = filename if '.pkl' in filename else f'{filename}.pkl'
         with open(filename, 'rb') as file:
             data = pickle.load(file)
             return data
 
-class Questionarie:
+
     @staticmethod
     def MakeQuestion(question, options, answer):
         """
@@ -92,7 +91,7 @@ class Questionarie:
                     1. question is the question which will be specified
                     2. options this will be a list containig the options of the question
                     3. answer will be one of the options which is the correct answer to the question
-                
+
                 3. This will make a var question inside the dict this will be the.dispayed question.
                 4. This function will also check if the answer is present in the options array.
                 5. If the above is true then the question dict will be returned.
@@ -111,7 +110,6 @@ class Questionarie:
             return t_question
         else:
             print('Invaild answer pls check!')
-
 
     @staticmethod
     def SaveQuestion(d_question, fn_question, folder='', shouldMakeFolder=False):
@@ -137,7 +135,7 @@ class Questionarie:
         try:
             # * this is the shorthand if where we will change the dir to the folder dir
             os.chdir(path.join(databasedir, folder)
-                    ) if folder else os.chdir(databasedir)
+                     ) if folder else os.chdir(databasedir)
         except:
             # ? This is the exception print statement
             print("Folder don't exist! please make the folder via function!")
@@ -156,7 +154,6 @@ class Questionarie:
                         f_question.write(f'\n{option}')
 
                     f_question.write(f"\n\n{d_question.get('answer')}")
-
 
     def RetriveQuestion(self, fn_question, folder=''):
         """
@@ -212,7 +209,6 @@ class Questionarie:
             _question = self.MakeQuestion(question, options, answer)
             return _question
 
-
     @staticmethod
     def DisplayQuestion(d_question):
         """
@@ -252,7 +248,7 @@ class Questionarie:
                 print('Incorrect, try again!')
                 print('-----------------------------------------')
 
-class New_Questionarie(Pickle):
+class Questionarie(Pickle):
     @staticmethod
     def MakeQuestion(question, options, answer):
         """
@@ -262,7 +258,7 @@ class New_Questionarie(Pickle):
                     1. question is the question which will be specified
                     2. options this will be a list containig the options of the question
                     3. answer will be one of the options which is the correct answer to the question
-                
+
                 3. This will make a var question inside the dict this will be the.dispayed question.
                 4. This function will also check if the answer is present in the options array.
                 5. If the above is true then the question dict will be returned.
@@ -306,7 +302,7 @@ class New_Questionarie(Pickle):
         try:
             # * this is the shorthand if where we will change the dir to the folder dir
             os.chdir(path.join(databasedir, folder)
-                    ) if folder else os.chdir(databasedir)
+                     ) if folder else os.chdir(databasedir)
         except:
             # ? This is the exception print statement
             print("Folder don't exist! please make the folder via function!")
@@ -319,7 +315,6 @@ class New_Questionarie(Pickle):
 
             except Exception as e:
                 print(e)
-
 
     @staticmethod
     def RetriveQuestion(fn_question, folder=''):
@@ -394,12 +389,4 @@ class New_Questionarie(Pickle):
 
 # ? Execution
 if __name__ == '__main__':
-    questionaire = New_Questionarie(databasedir)
-
-    # r_question = questionaire.MakeQuestion('How is Udit?',['Good', 'Bad', 'Fat', 'Old'], 'Good')
-
-    # questionaire.SaveQuestion(r_question, 'nature', 'WhatDoYaThin', True)
-    
-    r_question = questionaire.RetriveQuestion('Udit')
-    questionaire.DisplayQuestion(r_question)
-
+    pass
