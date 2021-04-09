@@ -81,7 +81,6 @@ class Pickle():
             data = pickle.load(file)
             return data
 
-
     @staticmethod
     def MakeQuestion(question, options, answer):
         """
@@ -248,27 +247,28 @@ class Pickle():
                 print('Incorrect, try again!')
                 print('-----------------------------------------')
 
+
 class Questionarie(Pickle):
     @staticmethod
     def MakeQuestion(question, options, answer):
         """
-            What is done:
-                1. This function will make a dict with the attributes as the params.
-                2. Params =>
-                    1. question is the question which will be specified
-                    2. options this will be a list containig the options of the question
-                    3. answer will be one of the options which is the correct answer to the question
+        What is done:
+            This function will make a dict with the attributes as the params.
+            1. Params =>
+                1. question: is the question asked which will be specified.
+                2. options: this will be a array containig the options of the question
+                3. answer: will be one of the options which is the correct answer to the question
 
-                3. This will make a var question inside the dict this will be the.dispayed question.
-                4. This function will also check if the answer is present in the options array.
-                5. If the above is true then the question dict will be returned.
+            2. This will make a question-object with all the parameters as attributes.
+            3. Then we will also check if the answer is present in the options array.
+            4. If the above is true then the question dict will be returned.
         """
 
         # @ This is the question database
         t_question = {
-            'question': question,
-            'options': options,
-            'answer': answer
+            "question": question,
+            "options": options,
+            "answer": answer
         }
 
         # * Here we are checking if the answer is present in the options
@@ -279,73 +279,64 @@ class Questionarie(Pickle):
             print('Invaild answer pls check!')
 
     @staticmethod
-    def SaveQuestion(d_question, fn_question, folder='', shouldMakeFolder=False):
+    def SaveQuestion(question_object, filename_question, folder_name="", should_make_folder=False):
         """
             What is done:
-                1. This function basically makes the file using the dict formed from above.
-                2. Params =>
-                    1. {d_question} is the dict from the above function.
-                    2. {fn_question} is the file name of the question.
-                    3. {folder} this is the name of the folder you want to store the file in.
-                    4. {makefolder} this param is dependent on the above param as this will make the folder with the {folder} name.
-                3. This will first check to make a folder if {folder} is specified and {makefolder = true}.
-                4. Then it will get into the folder specified.
-                5. Making the file either inside a folder or root database with name {fn_question}.
-                6. Adding the dict values to the file => we will add the the question, answer and options inside the file.
-                7. Check how to writing of the file is done
+                This function basically makes the file using the question-object formed from above.
+                1. Params =>
+                    1. {question_object}: is the dict from the above function.
+                    2. {filename_question}: is the filename of the question.
+                *** Optional
+                    3. {folder_name}: this is the name of the folder you want to store the file in.
+                    4. {should_make_folder}: this param is a bool which will decide if the folder with name {folder_name} should be made.
+
+                2. This will first check to make a folder if {folder} is specified and {should_make_folder = true}.
+                3. Then it will chage_dir into the folder specified.
+                4. Making the file either inside a folder or root database with name {filename_question}.
+                5. We will make the file with pickle class
         """
-      # $ We will be checking if we should make folder or not
-        if shouldMakeFolder:
-            os.mkdir(path.join(databasedir, folder))
+      # ! We will be checking if we should make folder or not
+        if should_make_folder:
+            os.mkdir(path.join(databasedir, folder_name))
 
       # ? This is the main try-except
         try:
             # * this is the shorthand if where we will change the dir to the folder dir
-            os.chdir(path.join(databasedir, folder)
-                     ) if folder else os.chdir(databasedir)
+            os.chdir(path.join(databasedir, folder_name)
+                     ) if folder_name else os.chdir(databasedir)
         except:
             # ? This is the exception print statement
             print("Folder don't exist! please make the folder via function!")
 
-      # @ This will occur when the changing of the dir is done
-        finally:
+        # @ This will occur when the changing of the dir is done
+        else:
             try:
                 # ? Making file in the database or the specfied folder
-                Pickle.StorePickleFile(d_question, fn_question)
+                Pickle.StorePickleFile(question_object, filename_question)
 
             except Exception as e:
                 print(e)
 
     @staticmethod
-    def RetriveQuestion(fn_question, folder=''):
+    def RetriveQuestion(filename_question, folder_name=''):
         """
             What is done:
-                1. Changing to database directory
-                2. Or changing to the folder dir if specified
-                3. Opening the question file with read mode
-                4. Obtaining the texts
-                    1. First line will be the question(* we are splicing the last two char of the string which is new line)
-                    2. Obtaining the options
-                        1. Looping with a fixed max options
-                        2. Initialsing the each line after this, untill the line ends meaning that the options have finished
-                        3. When the line ends we will break this loop for options
-                    3. The like the questions we will take the answer and splice it
-                5. We will store all this str in vars
-                6. Then we will make a question using MakeQuestion() => param as the stored vars
-                7. We will store the returned dict from MakeQuestion()
-                8. Then we will return this dict
+                This function will retrieve the file info with pickle class and return the question_object
+                1. Changing to database directory, Or changing to the folder dir if specified.
+                2. Checking if the folder is correct or not.
+                3. Retrieving the file with the pickle class and returning the question_object.
         """
         # @ Changing the dir to the root database
         os.chdir(databasedir)
-        try:
-            if folder:
-                os.chdir(path.join(databasedir, folder))
 
+        try:
+            if folder_name:
+                os.chdir(path.join(databasedir, folder_name))
         except:
             print("Folder don't exist! please make the folder via function!")
-
-        d_question = Pickle.RetrievePickleFile(fn_question)
-        return d_question
+        finally:
+            question_obejct = Pickle.RetrievePickleFile(filename_question)
+            return question_obejct
 
     @staticmethod
     def DisplayQuestion(d_question):
@@ -358,33 +349,24 @@ class Questionarie(Pickle):
             5. Asking for input as the question number
             6. Checking the input number with the answer number
         """
-        # $ Here we are printing the main question
-        print(d_question.get('question'))
+      # @ Here we are printing the main question
+        print(d_question.get("question"))
 
       # ? Here I am storing the options from the dict in a seperate var
-        options = d_question.get('options')
-
-      # @ Here I am intialising the n_answer which will be the index number of the which is correct
-        n_answer = 0
+        options = d_question.get("options")
+        answer_index = options.index(d_question.get("answer"))
 
       # * Here I am looping through the options list with an index - i
-        for i, option in enumerate(options):
-            print(f'{i + 1}) {option}')
+        [print(f'{i + 1}) {option}') for i, option in enumerate(options)]
 
-          # * Here I am checking if the option is the answer if yes then the index will also be the answer so I am setting the n_answer as the i
-            if option == d_question.get('answer'):
-                n_answer = (i + 1)
-
-        while True:
-            i_answer = int(input('Your answer number: '))
-            if i_answer == n_answer:
-                # $ Change this so it will work as marking
-                print('Your answer is correct!')
-                print('-----------------------------------------')
-                return
-            else:
-                print('Incorrect, try again!')
-                print('-----------------------------------------')
+        input_answer_index = int(input('Your answer number: '))
+        if input_answer_index == answer_index:
+            print("Your answer is correct!")
+            print('-----------------------------------------')
+            return
+        else:
+            print("Incorrect")
+            print('-----------------------------------------')
 
 
 # ? Execution
