@@ -117,7 +117,6 @@ def Won(boardObj):
             5. Checking if the cell values are equal using the euler axiom
             6. If all the condition are met then returing true
         """
-        
         # ? Storing the coordinate tuple using the GetCoordinates() method
         coord1 = GetCoordinates(winstate[0])
         coord2 = GetCoordinates(winstate[1])
@@ -323,4 +322,3 @@ if __name__ == "__main__":
     # print(Won(board))
 
     FullGame()
-    

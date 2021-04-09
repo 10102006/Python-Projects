@@ -1,5 +1,4 @@
 '''
-    #Summary
 
 # $ Hey Udit from future a make some changes
 
@@ -36,8 +35,8 @@ from os import path
 import pickle
 
 
-rootdir = os.getcwd()
-databasedir = path.join(rootdir, 'MCQ Quesionarie\Database')
+root_directory = os.getcwd()
+database_directory = path.join(root_directory, 'MCQ Quesionarie\Database')
 
 
 # @ Defining
@@ -128,13 +127,13 @@ class Pickle():
         """
       # $ We will be checking if we should make folder or not
         if shouldMakeFolder:
-            os.mkdir(path.join(databasedir, folder))
+            os.mkdir(path.join(database_directory, folder))
 
       # ? This is the main try-except
         try:
             # * this is the shorthand if where we will change the dir to the folder dir
-            os.chdir(path.join(databasedir, folder)
-                     ) if folder else os.chdir(databasedir)
+            os.chdir(path.join(database_directory, folder)
+                     ) if folder else os.chdir(database_directory)
         except:
             # ? This is the exception print statement
             print("Folder don't exist! please make the folder via function!")
@@ -173,10 +172,10 @@ class Pickle():
                 8. Then we will return this dict
         """
         # @ Changing the dir to the root database
-        os.chdir(databasedir)
+        os.chdir(database_directory)
         try:
             if folder:
-                os.chdir(path.join(databasedir, folder))
+                os.chdir(path.join(database_directory, folder))
 
         except:
             print("Folder don't exist! please make the folder via function!")
@@ -297,13 +296,13 @@ class Questionarie(Pickle):
         """
       # ! We will be checking if we should make folder or not
         if should_make_folder:
-            os.mkdir(path.join(databasedir, folder_name))
+            os.mkdir(path.join(database_directory, folder_name))
 
       # ? This is the main try-except
         try:
             # * this is the shorthand if where we will change the dir to the folder dir
-            os.chdir(path.join(databasedir, folder_name)
-                     ) if folder_name else os.chdir(databasedir)
+            os.chdir(path.join(database_directory, folder_name)
+                     ) if folder_name else os.chdir(database_directory)
         except:
             # ? This is the exception print statement
             print("Folder don't exist! please make the folder via function!")
@@ -327,11 +326,11 @@ class Questionarie(Pickle):
                 3. Retrieving the file with the pickle class and returning the question_object.
         """
         # @ Changing the dir to the root database
-        os.chdir(databasedir)
+        os.chdir(database_directory)
 
         try:
             if folder_name:
-                os.chdir(path.join(databasedir, folder_name))
+                os.chdir(path.join(database_directory, folder_name))
         except:
             print("Folder don't exist! please make the folder via function!")
         finally:
@@ -339,7 +338,7 @@ class Questionarie(Pickle):
             return question_obejct
 
     @staticmethod
-    def DisplayQuestion(d_question):
+    def DisplayQuestion(question_object):
         """
          What is done:
             1. Printing the main question
@@ -350,11 +349,11 @@ class Questionarie(Pickle):
             6. Checking the input number with the answer number
         """
       # @ Here we are printing the main question
-        print(d_question.get("question"))
+        print(question_object.get("question"))
 
       # ? Here I am storing the options from the dict in a seperate var
-        options = d_question.get("options")
-        answer_index = options.index(d_question.get("answer"))
+        options = question_object.get("options")
+        answer_index = int(options.index(question_object.get("answer"))) + 1
 
       # * Here I am looping through the options list with an index - i
         [print(f'{i + 1}) {option}') for i, option in enumerate(options)]
@@ -371,4 +370,8 @@ class Questionarie(Pickle):
 
 # ? Execution
 if __name__ == '__main__':
-    pass
+    questionaire = Questionarie(database_directory)
+
+    example_question = questionaire.RetriveQuestion("Name Question")
+    print(example_question)
+    questionaire.DisplayQuestion(example_question)
