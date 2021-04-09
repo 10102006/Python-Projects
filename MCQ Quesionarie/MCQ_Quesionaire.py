@@ -1,18 +1,15 @@
 '''
     #Summary
 
-# $ He Udit from future a make some changes
+# $ Hey Udit from future a make some changes
 
 # ? These are the changes
-    1. Make this more efficient
-    2. Make it so that we can Make question in the console
-    3. Add a feature so that we can select a folder with question and all it's question will be displayed
     4. Add a marking system
 
 Database = {
-  question name: {
+  question id: {
     question: 'Pick one?',
-    answer: 'b',
+    answer: b,
     options:[a, b, c, d]
   }
 }

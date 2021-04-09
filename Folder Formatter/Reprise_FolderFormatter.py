@@ -12,25 +12,33 @@ What to be done:
 # * Imports
 import os
 from os import path
-from FolderTree import FolderTree
+from FolderDetails import FolderDetails
 
 _path = path.join('F:\\Udit Downloads\\Setups')
 os.chdir(_path)
 
 # @ Defination
 
-def FormatFilenames(folderpath=_path, shouldNumberised=False):
+def FormatFilenames(folderpath=_path, shouldNumerised=False):
     """
+    What to do:
+        1. Obtaining all the names of the files in the folder
+        2. Looping through the files and capitalising the names
+        3. If the files should be numerised then lopping through the files then the files will be numbered
     """
-    folderpath = path.join(folderpath)
-    files = FolderTree(folderpath)
+    # * Obatining the filenames with the FolderTree file
+        # ? The detail_required is 1 by default
+    files = FolderDetails(folderpath)
+
+    os.chdir(folderpath)
 
     for file in files:
         os.rename(file.capitalize())
+        print(file)
 
     print('----------------------------------------------------------------------')
 
-    if shouldNumberised:
+    if shouldNumerised:
         for index, file in enumerate(files, 1):
             n_filename = f'{index}_{file}'
             os.rename(n_filename)
@@ -40,7 +48,7 @@ def ExtractFormats(folderpath=_path):
     """
     """
     folderpath = path.join(folderpath)
-    files = FolderTree(folderpath)
+    files = FolderDetails(folderpath)
 
     formats = []
 
@@ -54,4 +62,4 @@ def ExtractFormats(folderpath=_path):
 
 # ? Implementation
 if __name__ == "__main__":
-    FormatFilenames(shouldNumberised=True)
+    FormatFilenames(shouldNumerised=True)
