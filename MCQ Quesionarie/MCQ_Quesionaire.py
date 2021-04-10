@@ -368,10 +368,10 @@ class Questionarie(Pickle):
             print('-----------------------------------------')
 
 
+
 # ? Execution
 if __name__ == '__main__':
     questionaire = Questionarie(database_directory)
 
-    example_question = questionaire.RetriveQuestion("Name Question")
+    example_question = questionaire.RetriveQuestion("Best person", "Personality test")
     print(example_question)
-    questionaire.DisplayQuestion(example_question)
