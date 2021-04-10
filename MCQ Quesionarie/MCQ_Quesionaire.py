@@ -64,6 +64,7 @@ class Pickle():
             3. When the file is made then we will add the data to the file.
         """
         filename = filename if '.pkl' in filename else f'{filename}.pkl'
+
         with open(filename, 'wb') as file:
             pickle.dump(data, file)
             print(f"{filename}  is made!")
@@ -80,174 +81,15 @@ class Pickle():
             data = pickle.load(file)
             return data
 
-    @staticmethod
-    def MakeQuestion(question, options, answer):
+
+class Questionaire(Pickle):
+
+    def __init__(self, database_directory):
         """
-            What is done:
-                1. This function will make a dict with the attributes as the params.
-                2. Params =>
-                    1. question is the question which will be specified
-                    2. options this will be a list containig the options of the question
-                    3. answer will be one of the options which is the correct answer to the question
-
-                3. This will make a var question inside the dict this will be the.dispayed question.
-                4. This function will also check if the answer is present in the options array.
-                5. If the above is true then the question dict will be returned.
+            So this functions makes a class a constructor
         """
+        self.database_directory = database_directory
 
-        # @ This is the question database
-        t_question = {
-            'question': question,
-            'options': options,
-            'answer': answer
-        }
-
-        # * Here we are checking if the answer is present in the options
-        if answer in options:
-            Database[question] = t_question
-            return t_question
-        else:
-            print('Invaild answer pls check!')
-
-    @staticmethod
-    def SaveQuestion(d_question, fn_question, folder='', shouldMakeFolder=False):
-        """
-            What is done:
-                1. This function basically makes the file using the dict formed from above.
-                2. Params =>
-                    1. {d_question} is the dict from the above function.
-                    2. {fn_question} is the file name of the question.
-                    3. {folder} this is the name of the folder you want to store the file in.
-                    4. {makefolder} this param is dependent on the above param as this will make the folder with the {folder} name.
-                3. This will first check to make a folder if {folder} is specified and {makefolder = true}.
-                4. Then it will get into the folder specified.
-                5. Making the file either inside a folder or root database with name {fn_question}.
-                6. Adding the dict values to the file => we will add the the question, answer and options inside the file.
-                7. Check how to writing of the file is done
-        """
-      # $ We will be checking if we should make folder or not
-        if shouldMakeFolder:
-            os.mkdir(path.join(database_directory, folder))
-
-      # ? This is the main try-except
-        try:
-            # * this is the shorthand if where we will change the dir to the folder dir
-            os.chdir(path.join(database_directory, folder)
-                     ) if folder else os.chdir(database_directory)
-        except:
-            # ? This is the exception print statement
-            print("Folder don't exist! please make the folder via function!")
-      # @ This will occur when the changing of the dir is done
-        finally:
-            try:
-                # ? Making file in the database or the specfied folder
-                with open(f'{fn_question}.txt', 'w') as f_question:
-                    pass
-            finally:
-                # ? Opening the file to write in it
-                with open(f'{fn_question}.txt', 'r+') as f_question:
-                    f_question.write(f"{d_question.get('question')} \n")
-
-                    for option in d_question.get('options'):
-                        f_question.write(f'\n{option}')
-
-                    f_question.write(f"\n\n{d_question.get('answer')}")
-
-    def RetriveQuestion(self, fn_question, folder=''):
-        """
-            What is done:
-                1. Changing to database directory
-                2. Or changing to the folder dir if specified
-                3. Opening the question file with read mode
-                4. Obtaining the texts
-                    1. First line will be the question(* we are splicing the last two char of the string which is new line)
-                    2. Obtaining the options
-                        1. Looping with a fixed max options
-                        2. Initialsing the each line after this, untill the line ends meaning that the options have finished
-                        3. When the line ends we will break this loop for options
-                    3. The like the questions we will take the answer and splice it
-                5. We will store all this str in vars
-                6. Then we will make a question using MakeQuestion() => param as the stored vars
-                7. We will store the returned dict from MakeQuestion()
-                8. Then we will return this dict
-        """
-        # @ Changing the dir to the root database
-        os.chdir(database_directory)
-        try:
-            if folder:
-                os.chdir(path.join(database_directory, folder))
-
-        except:
-            print("Folder don't exist! please make the folder via function!")
-
-        with open(f'{fn_question}.txt', 'r') as f_question:
-            # * This will retrieve the question but the last two char will be left
-            question = (f_question.readline())[:-1]
-
-            # $ this is just a dummy leave
-            f_question.readline()
-
-            # @ This will contain the the options
-            options = []
-
-            # * In this loop we will get the option and also remove the end /n char
-            while True:
-                option = (f_question.readline())[:-1]
-
-                # * This will ensure that if option is empty then we will break out of loop
-                if option:
-                    options.append(option)
-                else:
-                    break
-
-          # @ This readline will get the last line of the file which is the answer
-            answer = f_question.readline()
-
-          # ? This is the dict question which is returned from the MakeQuestion()
-            _question = self.MakeQuestion(question, options, answer)
-            return _question
-
-    @staticmethod
-    def DisplayQuestion(d_question):
-        """
-         What is done:
-            1. Printing the main question
-            2. Printing the options in a for loop
-            3. Also making an index with enumerate
-            4. Initialising the answer index by checking with the index of the options
-            5. Asking for input as the question number
-            6. Checking the input number with the answer number
-        """
-        # $ Here we are printing the main question
-        print(d_question.get('question'))
-
-      # ? Here I am storing the options from the dict in a seperate var
-        options = d_question.get('options')
-
-      # @ Here I am intialising the n_answer which will be the index number of the which is correct
-        n_answer = 0
-
-      # * Here I am looping through the options list with an index - i
-        for i, option in enumerate(options):
-            print(f'{i + 1}) {option}')
-
-          # * Here I am checking if the option is the answer if yes then the index will also be the answer so I am setting the n_answer as the i
-            if option == d_question.get('answer'):
-                n_answer = (i + 1)
-
-        while True:
-            i_answer = int(input('Your answer number: '))
-            if i_answer == n_answer:
-                # $ Change this so it will work as marking
-                print('Your answer is correct!')
-                print('-----------------------------------------')
-                return
-            else:
-                print('Incorrect, try again!')
-                print('-----------------------------------------')
-
-
-class Questionarie(Pickle):
     @staticmethod
     def MakeQuestion(question, options, answer):
         """
@@ -368,10 +210,88 @@ class Questionarie(Pickle):
             print('-----------------------------------------')
 
 
+class ConsleQuestionaire(Questionaire):
+    """
+    MainFunction(numberOfQuestion, test-name, ):
+        questions = []
+        for range(numberOfQuestion):
+            question = MakeQuestion() => will return an question-object
+            question.append(question)
+        ask to save the questions -
+            - make a folder to store the questions
+            - in loop save the question in the folder
+    """
+
+    def __init__(self, database_directory):
+        """
+            So this functions makes a class a constructor
+        """
+        self.database_directory = database_directory
+
+    @staticmethod
+    def MakeQuestion():
+        """
+        This function will make question-object in the console and then return the question-object
+        """
+        question = input("Enter the question:  ")
+
+        def MakeOptions(numberOfOptions=4):
+            """
+            This function will make a list with all the options and  return the list 
+            """
+            options = []
+            for _ in range(numberOfOptions):
+                option = input("> ")
+                options.append(option)
+            return options
+
+        options = MakeOptions()
+        answer = input("Answer:  ")
+
+        question_object = Questionaire.MakeQuestion(question, options, answer)
+        return question_object
+
+    def MakeTest(self, numberOfQuestion=0, questions=[]):
+        """
+        This is the main function
+        """
+        nameOfTest = input("Name of the test: ")
+
+        for question_index in range(numberOfQuestion if numberOfQuestion else int(input("Enter number of question: "))):
+            print('-----------------------------------------')
+            question = self.MakeQuestion()
+            question.update({"index": str(question_index + 1)})
+
+            questions.append(question)
+            print('-----------------------------------------')
+
+        try:
+            print(questions)
+            shouldSave = True if input(
+                "Should save(0 - true, 1 - false): ") == "0" else False
+            if shouldSave:
+                os.chdir(database_directory)
+                os.mkdir(nameOfTest)
+
+                for question in questions:
+                    Questionaire.SaveQuestion(
+                        question, question.get("index"), nameOfTest)
+
+                # [Questionaire.SaveQuestion(question, question.get("index"), nameOfTest) for question in questions]
+        except Exception as e:
+            print(e)
+
 
 # ? Execution
 if __name__ == '__main__':
-    questionaire = Questionarie(database_directory)
+    questionaire = ConsleQuestionaire(database_directory)
 
-    example_question = questionaire.RetriveQuestion("Best person", "Personality test")
-    print(example_question)
+    # _questionaire = Questionaire(database_directory)
+    # questions = []
+    # question1 = _questionaire.MakeQuestion("Colour of sun?", ["blue", "pink", "yellow", "green"], "yellow")
+    # question2 = _questionaire.MakeQuestion("Colour of water?", ["blue", "pink", "yellow", "green"], "blue")
+
+    # questions.append(question1)
+    # questions.append(question2)
+
+    questionaire.MakeTest()
