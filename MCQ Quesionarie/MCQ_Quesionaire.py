@@ -202,12 +202,9 @@ class Questionaire(Pickle):
 
         input_answer_index = int(input('Your answer number: '))
         if input_answer_index == answer_index:
-            print("Your answer is correct!")
-            print('-----------------------------------------')
-            return
+            return True
         else:
-            print("Incorrect")
-            print('-----------------------------------------')
+            return False
 
 
 class ConsleQuestionaire(Questionaire):
@@ -281,17 +278,49 @@ class ConsleQuestionaire(Questionaire):
         except Exception as e:
             print(e)
 
+    def RetrieveTest(self, test_name):
+        """
+        This function will retrieve all the questions and the name of the test and store them in a dict => test_object
+        """
+        os.chdir(path.join(self.database_directory, test_name))
+        test_object = {"test name": test_name}
+
+        question_objects = []
+
+        questions_name = os.listdir()
+        for question_name in questions_name:
+            question_object = Questionaire.RetriveQuestion(
+                question_name, test_name)
+            question_objects.append(question_object)
+
+        test_object.update({"questions": question_objects})
+
+        return test_object
+
+    @staticmethod
+    def DisplayTest(test_object):
+        """
+        This function will display all the questions and also the scores
+        """
+        test_name = test_object.get("test name")
+        questions = test_object.get("questions")
+        score = 0
+
+        print("***************  " + test_name + "  ***************\n")
+
+        for question in questions:
+            print('-----------------------------------------')
+            result = Questionaire.DisplayQuestion(question)
+            print('-----------------------------------------')
+
+            score = score + 1 if result else score
+
+        print("Your score is: " + str(score))
+
 
 # ? Execution
 if __name__ == '__main__':
     questionaire = ConsleQuestionaire(database_directory)
 
-    # _questionaire = Questionaire(database_directory)
-    # questions = []
-    # question1 = _questionaire.MakeQuestion("Colour of sun?", ["blue", "pink", "yellow", "green"], "yellow")
-    # question2 = _questionaire.MakeQuestion("Colour of water?", ["blue", "pink", "yellow", "green"], "blue")
-
-    # questions.append(question1)
-    # questions.append(question2)
-
-    questionaire.MakeTest()
+    example_test = questionaire.RetrieveTest("Aptitude Test")
+    questionaire.DisplayTest(example_test)
