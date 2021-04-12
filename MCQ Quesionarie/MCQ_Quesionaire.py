@@ -1,10 +1,5 @@
 '''
 
-# $ Hey Udit from future a make some changes
-
-# ? These are the changes
-    4. Add a marking system
-
 Database = {
   question id: {
     question: 'Pick one?',
@@ -209,32 +204,31 @@ class Questionaire(Pickle):
 
 class ConsleQuestionaire(Questionaire):
     """
-    MainFunction(numberOfQuestion, test-name, ):
-        questions = []
-        for range(numberOfQuestion):
-            question = MakeQuestion() => will return an question-object
-            question.append(question)
-        ask to save the questions -
-            - make a folder to store the questions
-            - in loop save the question in the folder
+    This class will allow us to make test in the console and also to give the test made in the console
     """
 
     def __init__(self, database_directory):
         """
-            So this functions makes a class a constructor
+            Saving the database_directory for convinience
         """
         self.database_directory = database_directory
 
-    @staticmethod
-    def MakeQuestion():
+    def MakeQuestion(self):
         """
-        This function will make question-object in the console and then return the question-object
+            This function will make question-object in the console and then return the question-object
+            1. Asking with input Main question
+            2. MakeOptions:
+                This function will take multiple inputs and store them in a list => return the list
+            3. Taking the answer input checking if the answer is in the options list
+            4. If the answer is correct then making a question-object with MakeQuestion()
+            5. Else rerun the function to revise the question
         """
-        question = input("Enter the question:  ")
-
         def MakeOptions(numberOfOptions=4):
             """
-            This function will make a list with all the options and  return the list 
+                This function will take multiple inputs and make a list of those input and => return the list
+                1. Making an empty list
+                2. In a for loop taking inputs in {numberOfOptions} times and adding the input in the list
+                3. Returning the list
             """
             options = []
             for _ in range(numberOfOptions):
@@ -242,15 +236,40 @@ class ConsleQuestionaire(Questionaire):
                 options.append(option)
             return options
 
+        question = input("Enter the question:  ")
         options = MakeOptions()
         answer = input("Answer:  ")
 
-        question_object = Questionaire.MakeQuestion(question, options, answer)
-        return question_object
+        if answer in options:
+            question_object = Questionaire.MakeQuestion(
+                question, options, answer)
+            return question_object
+        else:
+            print("Sorry answer didn't match")
+            print('-----------------------------------------')
+            self.MakeQuestion()
 
     def MakeTest(self, numberOfQuestion=0, questions=[]):
         """
-        This is the main function
+            This function will make the test which will make a folder and the questions as its files
+            1. Taking input for the name of the test
+            2. If the {numberOfQuestions} is given then we will make that number of questions
+                Else we will take the number of questions as input
+            3. In for-loop
+                1. Decorators
+                2. Making a question with the MakeQuestion() function
+                3. Storing the question-object made
+                4. ** additional storing the order in which the question was made as {question_index}
+                5. Appeding this question made in the questions list
+            4. Try:
+                1. Printing the questions as check
+                2. Asking if the questions should be stored
+                3. If true
+                    1. Then changing the dir to the database dir
+                    2. Making the dir named (nameOfTest)
+                    3. In a for loop:
+                        1. Storing the questions in the folder
+                        2. Storing with StoreQuestion() function and naming the file with the index
         """
         nameOfTest = input("Name of the test: ")
 
@@ -281,6 +300,15 @@ class ConsleQuestionaire(Questionaire):
     def RetrieveTest(self, test_name):
         """
         This function will retrieve all the questions and the name of the test and store them in a dict => test_object
+            1. Changing into the test folder dir
+            2. Making a temp test_object and fixing the {test name} attribute
+            3. Making an empty {question_objects} list
+            4. Finding the name of the questions with listdir inside the test folder
+            5. In for loop:
+                1. Retrieving the question_object with RetiriveQuestion() function
+                2. And storing the returned object in the questions list
+            6. Adding the {questions} attribute in the {test_object}
+            7. Returning the {test_object}
         """
         os.chdir(path.join(self.database_directory, test_name))
         test_object = {"test name": test_name}
@@ -300,7 +328,14 @@ class ConsleQuestionaire(Questionaire):
     @staticmethod
     def DisplayTest(test_object):
         """
-        This function will display all the questions and also the scores
+        This function will display the test and its questions and also the scores
+            1. Obtaining the attributes of the test_object and storing them in variables
+            2. Also storing the {score} as variable
+            3. In a for loop:
+                1. Displaying the questions using the DisplayQuestion() function
+                2. This function will return a bool depending on the question if the answer is correct then it will be true else it will be false
+                3. and increaing the score if the return value is true 
+            4. At the end printing the score
         """
         test_name = test_object.get("test name")
         questions = test_object.get("questions")
