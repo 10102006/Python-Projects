@@ -1,5 +1,4 @@
 """
-  Overview>
 
 What to do:
     1. 
@@ -16,84 +15,94 @@ Notes template:
 # @ Imports
 import pickle
 import os
-from os import path
-
-Mpath = 'E:\Coding & Bowsers\Python Codes\Projects//New_Notes App\Database'
+# from os import path
 
 # * Defining
+
 
 class Main():
     """
     """
-    @staticmethod
-    def MakeList(name, description, notes=[]):
-        notes = {'name':name, 'description':description, 'notes':notes}
-        return notes
+    def __init__(self, database_directory):
+            """
+                So this functions makes a class a constructor
+            """
+            self.database_directory = database_directory
 
-    def EditList(self, list_obj, edit_obj, what_to_edit=3, republish=False):
+
+    @staticmethod
+    def MakeList(list_name, list_description, notes=[]):
         """
+        Making a note_object and return it
+        """
+        note_object = {'name': list_name,
+                       'description': list_description, 'notes': notes}
+        return note_object
+
+    def EditList(self, list_object, editing_detail, what_to_edit=3, republish=False):
+        """
+        This function will be used to edit the list_object
         If the what_to_edit is:
             1. => name of list
             2. => description of list
             3. => (default) List of notes
         """
-        previous_name = list_obj.get('name')
-        if what_to_edit==1:
-            list_obj.update({'name':edit_obj})
-            
-        elif what_to_edit==2:
-            list_obj.update({'description':edit_obj})
-            
-        else:
-            list_obj.update({'notes':edit_obj})
+        previous_name = list_object.get('name')
+
+        list_object.update(
+            {'name' if what_to_edit == 1 else 'description' if what_to_edit == 2 else 'notes': editing_detail})
 
         if republish:
             os.remove(f'{previous_name}.pkl')
-            self.PublishList(list_obj)
+            self.PublishList(list_object)
 
-    @staticmethod
-    def PublishList(list_obj, file_path=''):
+    def PublishList(self, list_object, file_path=''):
         """
+        This function will make a pkl file of the list_object in the database folder
         """
-        os.chdir(Mpath if not file_path else file_path)
-        filename = list_obj.get('name')
+        os.chdir(self.database_directory if not file_path else file_path)
+        filename = list_object.get('name')
 
         filename = filename if '.pkl' in filename else f'{filename}.pkl'
+
         try:
             with open(filename, 'wb') as file:
-                pickle.dump(list_obj, file)
+                pickle.dump(list_object, file)
             print(f'{filename} > sucessfully made')
+
         except Exception as exception:
             print(exception)
             print(filename)
 
-    @staticmethod
-    def RetrieveList(list_name, file_path=''):
+    def RetrieveList(self, list_name):
         """
+        This function will retrive the pkl file we made with the previous function and return the => list_object
         """
-        if file_path:
-            os.chdir(file_path)
+        os.chdir(self.database_directory)
 
         list_name = list_name if '.pkl' in list_name else f'{list_name}.pkl'
-        with open(list_name, 'rb') as file:
-            data = pickle.load(file)
-            return data
 
-class CMD(Main):
+        with open(list_name, 'rb') as file:
+            list_object = pickle.load(file)
+            return list_object
+
+
+class Console(Main):
     """
+    This class will help us to use the previous class with console
     """
     @staticmethod
     def GenerateList():
         """
         """
-        t_list = []
+        temporary_list = []
         while True:
             item = input('> ')
             if item:
-                t_list.append(item)
+                temporary_list.append(item)
             else:
                 break
-        return t_list
+        return temporary_list
 
     @staticmethod
     def ChooseItemFromList(given_list):
@@ -131,27 +140,30 @@ class CMD(Main):
 
         list_obj = Main.RetrieveList(list_name[:-4])
 
-        what_to_edit = input('What do you what to edit(1:name, 2:description, 3:notes): ')
+        what_to_edit = input(
+            'What do you what to edit(1:name, 2:description, 3:notes): ')
         print('------------------------------------------')
         if what_to_edit == '3':
             edit_obj = self.GenerateList()
         else:
-            edit_obj = input(f'Enter {"name" if what_to_edit == "1" else "description"} of the list: ')
+            edit_obj = input(
+                f'Enter {"name" if what_to_edit == "1" else "description"} of the list: ')
 
         Main.EditList(list_obj, edit_obj, what_to_edit, True)
+
 
 # ? Implementation
 if __name__ == "__main__":
     pass
 
-    main = Main()
-    cmd = CMD()
+    main = Main('E:\Coding & Bowsers\Python Codes\Projects//New_Notes App\Database')
+    # cmd = CMD('E:\Coding & Bowsers\Python Codes\Projects//New_Notes App\Database')
 
     # t_list = cmd.MakeList()
     # print(t_list)
 
     # cmd.EditList(Mpath)
-    
+
     # t_list = MakeList('Test', 'test-I')
 
     # print(t_list)
