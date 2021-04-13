@@ -1,0 +1,4 @@
+Cryptographer class
+    1. Generate_Main_Key: main key will be used for encrypting
+    2. Load_Main_Key: Retrieving the main key
+    3. Encrypt_String

@@ -23,21 +23,23 @@ import os
 class Main():
     """
     """
+
     def __init__(self, database_directory):
-            """
-                So this functions makes a class a constructor
-            """
-            self.database_directory = database_directory
+        """
+            So this functions makes a class a constructor
+        """
+        self.database_directory = database_directory
 
-
-    @staticmethod
-    def MakeList(list_name, list_description, notes=[]):
+    def MakeList(self, list_name, list_description, notes=[], publish=False):
         """
         Making a note_object and return it
         """
-        note_object = {'name': list_name,
+        list_object = {'name': list_name,
                        'description': list_description, 'notes': notes}
-        return note_object
+        if publish:
+            self.PublishList(list_object)
+
+        return list_object
 
     def EditList(self, list_object, editing_detail, what_to_edit=3, republish=False):
         """
@@ -91,18 +93,6 @@ class Console(Main):
     """
     This class will help us to use the previous class with console
     """
-    @staticmethod
-    def GenerateList():
-        """
-        """
-        temporary_list = []
-        while True:
-            item = input('> ')
-            if item:
-                temporary_list.append(item)
-            else:
-                break
-        return temporary_list
 
     @staticmethod
     def ChooseItemFromList(given_list):
@@ -117,15 +107,30 @@ class Console(Main):
 
             return item
 
-    def MakeList(self):
+    @staticmethod
+    def MakeList():
         """
         """
+        def GenerateList():
+            """
+            This function will take input until an empty string is given and store all the string in a list => return this list
+            """
+            temporary_list = []
+            while True:
+                item = input('> ')
+                if item:
+                    temporary_list.append(item)
+                else:
+                    break
+
+            return temporary_list
+
         name = input('Enter name of list: ')
         description = input("Enter list description: ")
-        notes = self.GenerateList()
+        notes = GenerateList()
 
-        list_obj = Main.MakeList(name, description, notes)
-        Main.PublishList(list_obj)
+        list_obj = Main.MakeList(name, description, notes, True)
+
         return list_obj
 
     def EditList(self, database_path):
@@ -156,7 +161,8 @@ class Console(Main):
 if __name__ == "__main__":
     pass
 
-    main = Main('E:\Coding & Bowsers\Python Codes\Projects//New_Notes App\Database')
+    main = Main(
+        'E:\Coding & Bowsers\Python Codes\Projects//New_Notes App\Database')
     # cmd = CMD('E:\Coding & Bowsers\Python Codes\Projects//New_Notes App\Database')
 
     # t_list = cmd.MakeList()
