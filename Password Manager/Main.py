@@ -1,26 +1,17 @@
-"""
-What is done:
-Name of the main key = main_encryption_key
-    1. Encrypter_Decrypter:
-        This class will be used to encrypt and decrypt the password files
-    2. 
-"""
-
 # * Imports
 from cryptography.fernet import Fernet
 
 import os
 from os import path
 
+import stdiomask
 
-rootdir = 'E:\Coding & Bowsers\Python Codes\Projects\Password Manager\Database'
-
-os.chdir(rootdir)
+database_directory = "E:\Coding & Bowsers\Python Codes\Projects\Password Manager\Database"
 
 # @ Defining
 
 
-def FolderDetails(folder_path, details_required=1, files=[], folders=[], folder_check=True):
+def FolderDetails(folder_path, file_extensions=False):
     """
     This a recursive method so this will repeat itself
 
@@ -32,6 +23,7 @@ def FolderDetails(folder_path, details_required=1, files=[], folders=[], folder_
         5. For cleaing we are index the level of folder heritage
     """
     folder_listDir = os.listdir(folder_path)
+    files = []
 
     for dir in folder_listDir:
         dir_path = path.join(folder_path, dir)
@@ -39,33 +31,18 @@ def FolderDetails(folder_path, details_required=1, files=[], folders=[], folder_
         if path.isfile(dir_path):
             files.append(dir)
 
-        else:
-            if folder_check:
-                folders.append(dir)
-                os.chdir(dir_path)
+    if not file_extensions:
+        files = [file.rsplit(".")[0] for file in files]
 
-                FolderDetails(dir_path, details_required,
-                              files, folders, False)
-
-    if details_required == 1:
         return files
-    elif details_required == 2:
-        return folders
-    else:
-        return(files, folders)
 
 
-class Cryptographer:
+class Crypter():
     """
-    This class will take care of all the Encryption and Decrypting of the passwords
-    What is done:
-        1. Generate_key to make a secret key to use as a reference and storing it in a file
-        2. Load_key to load the previous key from the file
-        3.
     """
 
     @staticmethod
-    def Generate_Main_Key():
+    def GenerateMainKey():
         """
         This is one time function which we will run in the starting to make a key which will be used to encrypt and decrypt the passwords.
             What is done:
@@ -80,7 +57,7 @@ class Cryptographer:
             key_file.write(key)
 
     @staticmethod
-    def Load_Main_Key():
+    def LoadMainKey():
         """
             Here we are opening the file where the secret key is made and obtaining that key
         """
@@ -88,7 +65,7 @@ class Cryptographer:
         # ? Here we are opening the special file, 'rb' is a special mode for key extension
         return open("main_encryption_key.key", "rb").read()
 
-    def Encrypt_Given(self, message):
+    def EncryptPassword(self, given_password):
         """
             What is done:
                 1. Using the Load_Scrt_Key() method to get the key and storing the key
@@ -97,10 +74,10 @@ class Cryptographer:
                 4. Returning the encrypted message
         """
         # @ Storing the previous secret key
-        key = self.Load_Main_Key()
+        key = self.LoadMainKey()
 
         # @ Encoding the message using the message module from fernet
-        encoded_message = message.encode()
+        encoded_message = given_password.encode()
 
         # ? Here we are encrypting the message/password
         fernet_key = Fernet(key)
@@ -108,7 +85,7 @@ class Cryptographer:
 
         return encrypted_message
 
-    def Decrypt_Message(self, encrypted_message):
+    def DecryptPassword(self, encrypted_password):
         """
             What is done:
                 1. Loading the secret key from the file using the Load_Scrt_key()
@@ -116,226 +93,184 @@ class Cryptographer:
                 3. Returning the decrpyted message
         """
         # @ Storing the previous secret key
-        key = self.Load_Main_Key()
+        key = self.LoadMainKey()
 
         # ? Here we are decrypting the message/password
         fernet_key = Fernet(key)
-        decrypted_message = fernet_key.decrypt(encrypted_message)
+        decrypted_message = fernet_key.decrypt(encrypted_password)
 
         return decrypted_message.decode()
 
 
-class password_manager(Cryptographer):
+class Password_Manager(Crypter):
+    """
+    """
 
-    def MasterPasswordLog(password):
+    def __init__(self, database_directory):
         """
-        Here were are making a master password which will be used as a set of protection protocol
-
-        What to do:
-            1. Taking input if password is not already set in the params
-            2. Encypting the password and storing it in a var
-            3. Making file with the website name and writing the encrypted password
-
+            So this functions makes a class a constructor
         """
-        # ? This is for checking if the file is already made or not
+        super().__init__()
+        self.database_directory = database_directory
+        os.chdir(database_directory)
+
+    def MasterPassword(self, master_password):
+        """
+        """
+        self
         if not os.path.isfile('Master_password.key'):
+            encrypted_master_password = super().EncryptPassword(given_password=master_password)
 
-            # ? Encyrpting the password and storing it in a var
-            en_user_password = Cryptographer.Encrypt_Given(password)
-
-            # ? Storing the master password in a file
             with open('Master_password.key', 'wb') as master_password:
-                master_password.write(en_user_password)
+                master_password.write(encrypted_master_password)
 
-    def Load_Password(filename='', dec_password=''):
+    def SavePassword(self, filename, password, canOveride=False):
         """
-        This will load the encrypted password from database file and return the decrypted password
-
-        What to do:
-            1. Checking if filename is provided or not if not then taking filename as input
-            2. Opeing a try execpt else function for error handling
-            3. Storing the encrypted text from the file from the database
-
         """
-        for i in range(10):
-            filename = f"{input('Enter your file name: ')}.key" if filename == '' else f"{filename}.key"
+        filename = f"{filename}.key" if ".key" in filename else filename
 
-            try:
-                en_password = open(filename, 'rb').read()
-                dec_password = Cryptographer.Decrypt_Message(en_password)
-            except:
-                if i != 0 and i != 9:
-                    print('Sorry the file is not available!')
-                    print('------------------------------------------')
-                elif i == 9:
-                    print('Sorry try again!')
-            else:
-                return dec_password
-
-    def Access_Password(shouldAccess=False):
-        """
-        This function is a type of authenticater this will take input from the user which will be the master password this will repeat untill the user gets the correct password
-        What is done:
-            1. First of all we are loading the master password using the Load_Password( method as storing it
-            2. Working in a while true loop
-                1. Taking input from the in each iteration
-                2. Checking if the input is the stored master password or not
-                3. If yes then we will break out of the loop continuing the program
-                4. Making sure that we want to run the program or not we will make a fail safe which is the should access if this is true then we will continue the program else  we won't
-                5.If the is wrong then printing that the input is wrong as continuing the loop
-
-        """
-        # ? Retrieving the master password and storing it
-        master_password = Load_Password('Master_password')
-
-        # * ALl the functionaly is done inside this
-        while True:
-            # @ Taking input from the user
-            user_pass = input('Enter you master password: ')
-
-            # * Checking the if the input is correct or not
-            if user_pass == master_password:
-
-                # @ Make the should acces true
-                shouldAccess = True
-                print('------------------------------------------')
-                break
-            else:
-                print('Sorry wrong password! \n')
-
-        # ? Returning this var so that it can be stored in a var
-        return shouldAccess
-
-    def Log_Password(filename='', password=''):
-        """
-        This the mechanism I will be using to store the passwords with username
-
-        Args:
-            filename (str): This represents the website name.
-            password (str): This is string password which will be encrypted.
-
-        What is done:
-            1. Taking input for both filename and password if it is not predefined
-            2. Then we will try to avoid any error
-            3. Main
-                1. Encrypting the password and storing it
-                2. Checking if the file is made or not
-                3. If made:
-                    1. Simply writing inside the file
-                4. If not made:
-                    1. If file name is taken then printing the that file name is taken
-                    2. Then printing the password if the user wants to
-                    3. The confirming to overwrite or not
-        """
-
-        # ? Taking inputs if they are not pre-defined
-        filename = input('Enter file name: ') if not filename else filename
-        password = input('Enter your password: ') if not password else password
-
-        # * Main Statement for error handeling
         try:
-            # ? Encrypting the password and storing it
-            en_password = Cryptographer.Encrypt_Given(password)
+            encrypted_password = super().EncryptPassword(password)
 
-            # * Checking if the is already made or not
-            if not (os.path.isfile(f'{filename}.key')):
+            if not (os.path.isfile(filename)):
+                with open(f"{filename}.key", 'wb') as password_file:
+                    password_file.write(encrypted_password)
 
-                # * Fail-safe checking if the filename is empty
-                if filename != '':
-
-                    # ? Finally making the file and writing the encrpted password in it
-                    with open(f"{filename}.key", 'wb') as t_file:
-                        t_file.write(en_password)
-
-            # * If the file is made then telling it to the user and asking to override it or not
             else:
-                print('------------------------------------------')
-                print('This Password is already taken do you want to override it.')
+                print(
+                    'This password-filename is already taken do you want to override it.')
 
-                # * This is for checking if user know master password
-                Access_Password()
-                print(Load_Password(filename))
+                if (True if input("Enter (1-Yes) (2-No): ") == "1" else False) and canOveride:
+                    print(self.LoadPassword(filename))
 
-                # * This is confirming logic
-                if True if input('Enter 1 to confirm: ') == '1' else False:
-                    with open(f"{filename}.key", 'wb') as t_file:
-                        t_file.write(en_password)
-                print('------------------------------------------')
+                    if True if input('Enter 1 to confirm: ') == '1' else False:
+                        with open(f"{filename}.key", 'wb') as password_file:
+                            password_file.write(encrypted_password)
+                            print('Password saved successfully!')
 
-        # * This will only run if the file is not made or some error occurs
-        except:
+        except Exception as exception:
+            print('-----------------------------------------')
+            print(exception)
             print('Your password is not saved!')
 
-        # * This is succes message for the user if the file is made and everything is fine
-        else:
-            print('Password saved successfully!')
-
-    def Load_Passwords(pre_folder=[]):
+    def LoadPassword(self, filename='', decrypted_password=''):
         """
-        This is a type of selecting passwords preview which will first display the password then it will ask which password should we open
-        What to do:
-            1. Using the folder tree py file we will be getting the list of all the files in the database folder
-            2. Then we must remove the master password and the secret key from this list to make it a little secure
-            3. Printing the elements of the above fromed list with an index
-            4. Then we will be changing the dir to database dir for error handling of the opening folder
-            5. Asking input of which folder to open
-            6. Intialising the name of the file to open,by splicing the .key extension
-            7. Using the LoadPassword() loading and storing the password
-            8. Printing the password
+        This function will be used to retrieve the passwords
         """
+        self
+        filename = filename if '.key' in filename else f"{filename}.key"
 
-        # ? Using the folderTree file to get the list of file available in the database folder and storing this list
-        pre_folder = FolderTree.PrintFolderTree(
-            rootdir) if pre_folder == [] else pre_folder
-
-        if 'Master_password.key' in pre_folder:
-            # * Removing the master password and secret key from this list
-            pre_folder.remove('Master_password.key')
-            pre_folder.remove('secret.key')
-
-        # * Looping through all the elements in thep prev-list and printing them with index
-        for index, f_password in enumerate(pre_folder, 1):
-            str_file = str(index) + ') ' + f_password[:-4]
-            print(str_file)
-
-        # @ Changing the root dir just in case
-        os.chdir(rootdir)
-
-        # * This is for error handling
         try:
-            # ? Asking for file number
-            n_password_f = int(
+            en_password = open(filename, 'rb').read()
+            decrypted_password = super().DecryptPassword(en_password)
+
+        except Exception as e:
+            print(e)
+
+        else:
+            return decrypted_password
+
+
+class CommandLine_Password_Manager(Password_Manager):
+    """
+    """
+
+    def __init__(self, datbase_directory):
+        """
+            So this functions makes a class a constructor
+        """
+        self.database_directory = datbase_directory
+        super().__init__(datbase_directory)
+
+    def MakePassword(self):
+        """
+        """
+        self
+        password_filename = input("Enter password filename: ")
+        password = stdiomask.getpass()
+        try:
+            super().SavePassword(password_filename, password)
+        except:
+            print('-----------------------------------------')
+            print("Filename taken!")
+            password_filename = input("Enter password filename: ")
+            super().SavePassword(password_filename, password)
+
+    def AccessPassword(self, number_trys=3):
+        """
+        """
+        self
+        master_password = super().LoadPassword('Master_password')
+
+        while True:
+            if number_trys == 0:
+                return False
+
+            user_input = stdiomask.getpass(prompt="Enter Master Password: ")
+
+            if user_input == master_password:
+                print('-----------------------------------------')
+                return True
+
+            number_trys -= 1
+
+    def LoadPasswords(self, password_filenames=[]):
+        """
+        """
+        if password_filenames == []:
+            password_filenames = FolderDetails(
+                self.database_directory)
+
+        if 'Master_password' in password_filenames or 'main_encryption_key' in password_filenames:
+            # * Removing the master password and secret key from this list
+            password_filenames.remove('Master_password')
+            password_filenames.remove('main_encryption_key')
+
+        for index, password_filename in enumerate(password_filenames, 1):
+            decorated_filename = f"{index})  {password_filename}"
+            print(decorated_filename)
+
+        os.chdir(database_directory)
+
+        try:
+            password_filename_index = int(
                 input('Enter the file number you want to open: ')) - 1
 
-            # ? Getting the element with index and removing the .key extension and storing
-            f_name_password = pre_folder[n_password_f][:-4]
+            password_filename = password_filenames[password_filename_index]
 
-            # ? Storing the return from the Load_Password
-            f_password = Load_Password(f_name_password)
+            decrypted_password = super().LoadPassword(password_filename)
+            print('-----------------------------------------')
+
         except:
-            f_password = 'Sorry wrong input try again!'
+            print('Sorry wrong input try again!')
+            return None
 
-        # @ Printing the return password
-        print(f_password)
-        return pre_folder
+        else:
+            print(password_filename + ' : ' + decrypted_password)
+            return decrypted_password, FolderDetails(
+                self.database_directory)
 
-    def MainLoop():
+    def MainLoop(self):
         """
         What is done:
             1.
         """
-        to_access = Access_Password()
-        f_passwords = []
-
-        if to_access:
+        if self.AccessPassword():
             while True:
-                what_todo = True if int(input(
-                    'What do you want to do(0 for storing and 1 for retireving): ')) == 0 else False
+                what_todo = input(
+                    'What do you want to do (1 for storing and 2 for retireving): ')
+
+                if what_todo == "1":
+                    what_todo = True
+                elif what_todo == "2":
+                    what_todo = False
 
                 if what_todo:
-                    Log_Password()
-                else:
-                    f_passwords = Load_Passwords(f_passwords)
+                    self.MakePassword()
+                elif not what_todo:
+                    self.LoadPasswords(password_filenames=[])
+
+                print('-----------------------------------------')
 
 
 # ? Execution
@@ -343,3 +278,20 @@ class password_manager(Cryptographer):
 
 if __name__ == "__main__":
     pass
+    # crypt = Cryptographer()
+    # password = "10102119"
+
+    # encypt_password = crypt.EncryptPassword(password)
+    # print(encypt_password)
+
+    # decrypt_password = crypt.DecryptPassword(encypt_password)
+    # print(decrypt_password)
+
+    # password_manager = Password_Manager(database_directory)
+    # password_manager.SavePassword("Google", "51252019")
+    # print(password_manager.LoadPassword("Aps School id.key"))
+
+    password_manager = CommandLine_Password_Manager(database_directory)
+    # # password_manager.LoadPasswords()
+    # # print(password_manager.AccessPassword())
+    password_manager.MainLoop()
