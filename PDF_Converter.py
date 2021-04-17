@@ -1,7 +1,3 @@
-"""
-  Overview>
-
-"""
 
 # @ Imports
 from PIL import Image

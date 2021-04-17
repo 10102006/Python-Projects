@@ -11,6 +11,7 @@ engine = pyttsx3.init()
 voices = engine.getProperty('voices')
 
 engine.setProperty('voices', voices[0].id)
+
 # @ Defining
 
 
@@ -63,6 +64,7 @@ def TakeCommand():
 
     # else:
     return str(query).lower()
+
 
 # ? Execution
 if __name__ == "__main__":
