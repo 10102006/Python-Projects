@@ -7,7 +7,8 @@ from os import path
 
 import stdiomask
 
-database_directory = "E:\Coding & Bowsers\Python Codes\Projects\Password Manager\Database"
+database_directory = f"{os.getcwd()}\\Database"
+os.chdir(database_directory)
 
 # @ Defining
 
@@ -38,12 +39,16 @@ def FolderDetails(folder_path, file_extensions=False):
         return files
 
 
-class Crypter():
+class Cryptographer():
     """
     """
+    def __init__(self, database_directory):
+            """
+                So this functions makes a class a constructor
+            """
+            self.database_directory = database_directory
 
-    @staticmethod
-    def GenerateMainKey():
+    def GenerateMainKey(self):
         """
         This is one time function which we will run in the starting to make a key which will be used to encrypt and decrypt the passwords.
             What is done:
@@ -51,17 +56,17 @@ class Crypter():
                 2. key => is most important because this is used to decrypt and encrypt the messages
                 3. Then we are opening the a file to store this key in that file
         """
-
+        os.chdir(self.database_directory)
         key = Fernet.generate_key()
 
         with open("main_encryption_key.key", "wb") as key_file:
             key_file.write(key)
 
-    @staticmethod
-    def LoadMainKey():
+    def LoadMainKey(self):
         """
             Here we are opening the file where the secret key is made and obtaining that key
         """
+        os.chdir(self.database_directory)
 
         # ? Here we are opening the special file, 'rb' is a special mode for key extension
         return open("main_encryption_key.key", "rb").read()
@@ -103,7 +108,7 @@ class Crypter():
         return decrypted_message.decode()
 
 
-class Password_Manager(Crypter):
+class Password_Manager(Cryptographer):
     """
     """
 
@@ -111,16 +116,15 @@ class Password_Manager(Crypter):
         """
             So this functions makes a class a constructor
         """
-        super().__init__()
+        super().__init__(database_directory)
         self.database_directory = database_directory
-        os.chdir(database_directory)
 
-    def MasterPassword(self, master_password):
+    def MakeMasterPassword(self, master_password=""):
         """
         """
         self
         if not os.path.isfile('Master_password.key'):
-            encrypted_master_password = super().EncryptPassword(given_password=master_password)
+            encrypted_master_password = super().EncryptPassword(master_password if master_password else stdiomask.getpass("Enter Master Password: "))
 
             with open('Master_password.key', 'wb') as master_password:
                 master_password.write(encrypted_master_password)
@@ -207,7 +211,7 @@ class CommandLine_Password_Manager(Password_Manager):
             if number_trys == 0:
                 return False
 
-            user_input = stdiomask.getpass(prompt="Enter Master Password: ")
+            user_input = stdiomask.getpass(prompt="Enter Master Password To Continue: ")
 
             if user_input == master_password:
                 print('-----------------------------------------')
@@ -259,12 +263,14 @@ class CommandLine_Password_Manager(Password_Manager):
         if self.AccessPassword():
             while True:
                 what_todo = input(
-                    'What do you want to do (1 for storing and 2 for retireving): ')
+                    'What do you want to do (1 for storing and 2 for retireving and 3 to quit): ')
 
                 if what_todo == "1":
                     what_todo = True
                 elif what_todo == "2":
                     what_todo = False
+                else:
+                    break
 
                 if what_todo:
                     self.MakePassword()
@@ -276,23 +282,15 @@ class CommandLine_Password_Manager(Password_Manager):
 
 # ? Execution
 
+cryptographer = Cryptographer(database_directory)
+password_manager = Password_Manager(database_directory)
+console_password_manager = CommandLine_Password_Manager(database_directory)
 
-if __name__ == "__main__":
-    pass
-    # crypt = Cryptographer()
-    # password = "10102119"
+if not path.isfile(f"{database_directory}\\main_encryption_key.key"):
+    cryptographer.GenerateMainKey()
 
-    # encypt_password = crypt.EncryptPassword(password)
-    # print(encypt_password)
+password_manager.MakeMasterPassword()
+print('-----------------------------------------')
+console_password_manager.MainLoop()
 
-    # decrypt_password = crypt.DecryptPassword(encypt_password)
-    # print(decrypt_password)
-
-    # password_manager = Password_Manager(database_directory)
-    # password_manager.SavePassword("Google", "51252019")
-    # print(password_manager.LoadPassword("Aps School id.key"))
-
-    password_manager = CommandLine_Password_Manager(database_directory)
-    # # password_manager.LoadPasswords()
-    # # print(password_manager.AccessPassword())
-    password_manager.MainLoop()
+input()
