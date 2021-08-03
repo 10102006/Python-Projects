@@ -3,7 +3,8 @@
 import os
 from os import path
 
-folder_directory = "E:\School Stuffs\School Books"
+schoolBooks_directory = "G:\\School Stuffs\\School Books"
+lightNovels_directory = "G:\\Udit Downloads\\Books"
 
 # @ Defination
 
@@ -51,8 +52,10 @@ def Main(folder_directory):
 
 
 if __name__ == "__main__":
-    pass
-    # t_list = ["udit", "kumar", "nishad", "yachna"]
-    # print(Choose_From_List(t_list))
+    choose_list = ["Light Novels", "School Books"]
+    whatToOpen = Choose_From_List(choose_list)
 
-    Main(folder_directory)
+    if whatToOpen == "Light Novels":
+        Main(lightNovels_directory)
+    elif whatToOpen == "School Books":
+        Main(schoolBooks_directory)
