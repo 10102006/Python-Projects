@@ -1,7 +1,7 @@
 This is will a notificaton based programs which will contain seperate py files for it's functions
 
 What might be necessary:
-1. Voice Recognizer
-2. Notificaton system
+1. Voice >>/
+2. Notificaton system >>/
 3. Google conversation api
-4. 
+4.
