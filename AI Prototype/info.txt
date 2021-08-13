@@ -1,7 +1,14 @@
 This is will a notificaton based programs which will contain seperate py files for it's functions
 
+What can it do:
+1. Should be able to use any website => using ml and api
+2. Should be able to make office files => templates and apis
+3. Should be able to make code => ml and python api and other
+4. Should be able to make changes to the pc
+5. Should be able to do some hacking => Haking learn
+6. Should be able to cross-platfrom code => other language code api
+
 What might be necessary:
 1. Voice >>/
 2. Notificaton system >>/
 3. Google conversation api
-4.
