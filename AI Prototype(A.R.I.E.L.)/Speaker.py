@@ -17,9 +17,12 @@ engine.setProperty(
 
 # * Defining
 
-# Saying some thing
-engine.say("Hello world!")
-engine.runAndWait()  # ! Important
+def Speak(message):
+  """
+  Saying some thing
+  """
+  engine.say(message)
+  engine.runAndWait()
 
 # ? Implementation
 if __name__ == "__main__":

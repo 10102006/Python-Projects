@@ -3,11 +3,10 @@
 import os
 from os import path
 
-schoolBooks_directory = "G:\\School Stuffs\\School Books"
-lightNovels_directory = "G:\\Udit Downloads\\Books"
+schoolBooks_directory = "D:\\School Stuffs\\School Books"
+lightNovels_directory = "E:\\Downloads\\Books"
 
 # @ Defination
-
 
 def Choose_From_List(list_object):
     """
@@ -50,6 +49,7 @@ def Main(folder_directory):
 
     os.startfile(folder_directory)
 
+# ? Running the code
 
 if __name__ == "__main__":
     choose_list = ["Light Novels", "School Books"]
