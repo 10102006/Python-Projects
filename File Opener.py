@@ -2,11 +2,13 @@
 # * Imports
 import os
 from os import path
+import re
 
-schoolBooks_directory = "D:\\School Stuffs\\School Books"
-lightNovels_directory = "E:\\Downloads\\Books"
+schoolBooks_directory = "E:\\School Stuffs\\School Books"
+lightNovels_directory = "F:\\Downloads\\Books"
 
 # @ Defination
+
 
 def Choose_From_List(list_object):
     """
@@ -17,11 +19,18 @@ def Choose_From_List(list_object):
     """
     [print(f"{index}. {item}") for index, item in enumerate(list_object, 1)]
 
-    index_wanted_item = int(
-        input("Enter the index number of the item you want: ")) - 1
+    index_wanted_item = input("Enter the index number of the item you want: ")
+
+    if len(index_wanted_item) and index_wanted_item.isnumeric():
+        index_wanted_item = int(index_wanted_item) - 1
+        return list_object[index_wanted_item]
+    else:
+        slt_lst = re.findall("[0-9][0-9]|[0-9]", index_wanted_item)
+        slt_lst = [int(item) - 1 for item in slt_lst]
+
+        return slt_lst
 
     print('-----------------------------------------')
-    return list_object[index_wanted_item]
 
 
 def Main(folder_directory):
@@ -31,7 +40,7 @@ def Main(folder_directory):
         2. In a while True:
             1. We will be choosing what item of the current folder we want to choose
             2. Joining the this extension to the {folder_directory}
-            3. This loop continue till a file is selected 
+            3. This loop continue till a file is selected
             4. If another folder is selected we will change the directory to that folder
     """
     os.chdir(folder_directory)
@@ -39,23 +48,43 @@ def Main(folder_directory):
     while True:
         directory_extension = Choose_From_List(os.listdir())
 
-        folder_directory = path.join(folder_directory, directory_extension)
+        if type(directory_extension) == list and path.isdir(folder_directory):
+            for file in directory_extension:
+                print(f"Opening... {os.listdir()[file]}")
+                # print(os.listdir()[file])
+                temp_folder_directory = path.join(
+                    folder_directory, os.listdir()[file])
 
-        if path.isfile(folder_directory):
-            print(f"Opening... {directory_extension}")
+                # print(temp_folder_directory)
+
+                os.startfile(temp_folder_directory)
             break
-        elif path.isdir(folder_directory):
-            os.chdir(folder_directory)
 
-    os.startfile(folder_directory)
+
+
+        else:
+            folder_directory = path.join(folder_directory, directory_extension)
+
+            if path.isfile(folder_directory):
+                print(f"Opening... {directory_extension}")
+                os.startfile(folder_directory)
+                break
+
+            elif path.isdir(folder_directory):
+                os.chdir(folder_directory)
+
 
 # ? Running the code
 
+
 if __name__ == "__main__":
-    choose_list = ["Light Novels", "School Books"]
+    choose_list = ["Light Novels", "School Books", "Own Folder"]
     whatToOpen = Choose_From_List(choose_list)
 
     if whatToOpen == "Light Novels":
         Main(lightNovels_directory)
     elif whatToOpen == "School Books":
         Main(schoolBooks_directory)
+    else:
+        new_directory = path.join(input("Enter Path: "))
+        Main(new_directory)

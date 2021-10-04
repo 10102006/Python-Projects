@@ -29,7 +29,6 @@ def Greet(name="Master"):
         f"Today is {datetime.today().date()}, and time is {datetime.today().time().hour} hours.")
 
 
-
 # ? Implementation
 if __name__ == "__main__":
     pass
