@@ -14,42 +14,80 @@ task = {
     "Description": "Buy potato and ketchup"
 }
 
+titles = ["Id", "Name", "Priority", "Completed"]
 
-class Display():
-    def __init__(self, task):
+
+class Table:
+    def __init__(self, titles, rows=0):
         """
             So this functions makes a class a constructor
         """
-        self.task = task
+        self.titles = titles
+        self.rows = rows
 
-    def MakeTable(self, rows=[], columns=[], cellSize=5):
+        self.values = {}
+
+        for title in self.titles:
+            if not self.values.__contains__(title):
+                self.values[title] = []
+
+        self.GetValues()
+
+    def GetValues(self):
+        return self.values
+
+
+class Display():
+    def __init__(self, table):
         """
-        What to do:
-            1. First make a table dict which will contain all the info about the table
-            2. 
+            So this functions makes a class a constructor
         """
-        if not rows and not columns:
-            rows = self.task.keys()
+        self.table = table
 
-        table = {
-            "Titles": ["Id", "Name", "Done"],
-        }
-
-        for title in table.get("Titles"):
-            if not table.__contains__(title):
-                table[title] = [' ' for column in range(columns)]
-
-        return table
-
-    def PrintTable(self, table):
+    def AddToTable(self, object):
         """
         """
-        print('-----------------------------------------')
-        pass
+        for item in object.keys():
+            if item in self.table.titles:
+                value = object.get(item)
+                self.table.GetValues().get(item).append(value)
+            else:
+                self.table.titles.append(item)
+                self.table.values[item] = [object.get(item)]
+
+        self.table.rows += 1
+
+    def PrintTable(self):
+        """
+        """
+        print('-' * 48)
+        [print(title, end=' | ') for title in self.table.titles]
+
+        print()
+        print('-' * 48)
+
+        for _ in range(self.table.rows):
+            for index, item in enumerate(self.table.values):
+                if item != "Titles" and item != "Rows":
+                    # print(table.get(item))
+                    print(self.table.values.get(item)[(index-2)], end=' | ')
+            print()
+
+        print('-' * 48)
+
 
 # ? Implementation
 if __name__ == "__main__":
-    display = Display(task)
+    pass
+    # toDoTable = Table(titles)
+    # display = Display(toDoTable)
 
-    toDoTable = display.MakeTable(4, 5)
-    display.PrintTable(toDoTable)
+    # # print(toDoTable.values)
+
+    # display.AddToTable(task)
+    # display.AddToTable(task)
+    # display.AddToTable(task)
+
+    # # print(toDoTable.values)
+
+    # display.PrintTable()
