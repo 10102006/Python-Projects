@@ -1,7 +1,7 @@
 """
 
 What to do:
-  1. Database:
+    1. Database:
       1. filename => date + id
       {
           "Id": {[id = enumerator]};
@@ -10,10 +10,6 @@ What to do:
           "Completed": {bool};
           "Description": {string};
       }
-      2. task maker
-      3. task retriever
-      4. task changer
-      5. task remover
 
 path: E:\Coding\Python Codes\Projects\TO-DO\Database
 path-II: TO-DO\Database
@@ -28,63 +24,108 @@ from datetime import date
 
 # * Defining
 
+
 class Database:
     def __init__(self, path):
         """
-            So this functions makes a class a constructor
+            - path for the database is stored in var {database_path}
+            - Intiating {ID()} method for enumeration
         """
         self.database_path = path
+
+        # - Changing the directory for easier file operations
         os.chdir(self.database_path)
 
         self.ID()
 
     def ID(self, function=0):
         """
+            - this is the initialisation for the id enumerator for the {TaskId} class
+            - use of the param {function} is to check what is needed:
+            - if 0 then initialising the file for the id enumeration storage
+            - if 1 then the reading and setting of the starting enumeration is took place
         """
+        # - Creating a file for the storage of the last id index
         if function == 0:
             if not path.isfile(path.join(self.database_path, "ID.txt")):
                 with open("ID.txt", "w") as id_file:
                     id_file.write("1")
+
+        # - Reading and Initialisation of the first enumeration
         elif function == 1:
             with open("Id.txt", "r") as id_file:
                 return int(id_file.readline())
 
     @staticmethod
     def SaveFile(data):
-        filename = f"{date.today()}-{data.get('Id')}"
+        """ - this is for creation of file for the task object in form of {data}"""
+        # $ - making a special file name using the index and task id => Implement later
+        # filename = f"{date.today()}-{data.get('Id')}"
 
+        filename = f"Task-{data.get('Id')}"
+
+        # - using json file dumping for the file creation
         with open(f"{filename}.json", "w") as json_file:
             json.dump(data, json_file)
 
     @staticmethod
-    def LoadFile(Id):
-        filename = f"{date.today()}-{Id}"
+    def LoadFile(taskId):
+        """ - this is for retrieving of the task from the file created using the param {taksId}, which corresponds to the task id"""
+        filename = f"Task-{taskId}"
 
+        # - retrieving the data using the json load() in dict format
         with open(f"{filename}.json", "r") as json_file:
             data = json.load(json_file)
             return data
 
-    def ChangeFile(self, Id, completed=True):
-        """
-        """
-        data = self.LoadFile(Id)
+    def ChangeFile(self, taskId, completed=True):
+        """ - implementation of the #checked funtion of the To-Do-List by change the value of the {completed} attribute of the task dict"""
+        # - retrieving the data of the task in dict formate
+        data = self.LoadFile(taskId)
+
+        # - changing of the completed attribute
         data.__setitem__("Completed", completed)
 
+        # - overwriting the task json file for change implementation
         self.SaveFile(data)
 
-    def RemoveFile(self, Id):
-        filename = f"{date.today()}-{Id}.json"
-        os.remove(path.join(self.database_path, filename))
+    def TrashFile(self, taskId):
+        """ - moving the task of id => {taskId} from the database folder to the #Trash folder"""
+        filename = f"Task-{taskId}.json"
+        os.replace(path.join(self.database_path, filename),
+                   path.join(self.database_path, "Trash"))
+
+    def CleanTrash(self, confirm=False):
+        # $ Make a retrieve trash function as well as reduce the file size of the trash files ;)
+        """ - removing the trash files from the trash folder in the database folder"""
+        os.chdir(path.join(self.database_path, "Trash"))
+        trashFiles = os.listdir()
+
+        # - removing the files via os.remove()
+        if confirm:
+            for filename in trashFiles:
+                os.remove(path.join(self.database_path, filename))
+
+        # - rechanging the path for convenience
+        os.chdir(self.database_path)
 
 
 class TaskId(Database):
     def __iter__(self):
+        """
+            - initialisation of a {id} enumerator
+            - using the {ID()} method of the {Database} class for getting the initial value of {id}
+        """
         self.id = self.ID(1)
         return self
 
     def __next__(self):
+        """
+            - defining the funtionality of the enumerator.next()
+            - making a temp var for the return value
+            - incrementing the {id} enumerator and updating the storage file with the new value
+        """
         current_id = self.id
-
         self.id += 1
 
         with open("Id.txt", "w") as id_file:
@@ -94,6 +135,8 @@ class TaskId(Database):
 
     @staticmethod
     def resetId():
+        """ - for reseting the value of the id enumerator"""
+        # - change the file value
         with open("Id.txt", "w") as id_file:
             id_file.write('1')
 

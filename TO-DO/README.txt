@@ -15,3 +15,14 @@ What all can be done:
    4. complete(taskId) => this is mark the task as completed
    5. remove(taskId) => this will remvoe the task after confirmation
    6. clear => whole list cleared after confirmation
+
+Database:
+   - make an instance of {Database} class => database = Database(database_path)
+   - make an id enumerator => Id = TaskId(database_path)
+                              id = iter(Id)
+   - make a task in dict format
+   - save the task using => database.SaveFile(task)
+   - retrieve the task using => r_task = database.LoadFile(taskId)
+   - #check the task using => database.ChangeFile(taskId)
+   - delete the task using => database.TrashFile(taskId)
+   - clean Trash folder => database.CleanTrash(True if input("Clean Trash y/n: ") == 'y' else False)
