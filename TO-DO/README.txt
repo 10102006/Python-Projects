@@ -30,5 +30,5 @@ Database:
 Viewer:
    - make an instance of {Table} class => toDoTable = Table(titles)
    - make an instance of {Display} class => display = Display(toDoTable)
-   - add task to the table using => display.AddToTable(task)
+   - add task to the table using => toDoTable.AddToTable(task)
    - print the table using => display.PrintTable()

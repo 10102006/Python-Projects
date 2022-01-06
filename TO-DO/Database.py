@@ -20,7 +20,8 @@ path-II: TO-DO\Database
 import os
 from os import path
 import json
-from datetime import date
+import shutil
+# $ from datetime import date
 
 # * Defining
 
@@ -92,8 +93,8 @@ class Database:
     def TrashFile(self, taskId):
         """ - moving the task of id => {taskId} from the database folder to the #Trash folder"""
         filename = f"Task-{taskId}.json"
-        os.replace(path.join(self.database_path, filename),
-                   path.join(self.database_path, "Trash"))
+        shutil.move(path.join(self.database_path, filename),
+                    path.join(self.database_path, "Trash"))
 
     def CleanTrash(self, confirm=False):
         # $ Make a retrieve trash function as well as reduce the file size of the trash files ;)

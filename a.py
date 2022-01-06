@@ -1,16 +1,7 @@
-from datetime import date, datetime
+import os
 
-Task = {
-    "Name": "Udit",
-    "Done": False,
-}
+lst = os.listdir('E:\Coding\Python Codes\Projects\TO-DO\Database')
 
-# print(Task)
-# Task.__setitem__("Done", True)
-# print(Task)
-
-lst = [1, 2, 3, ]
-lst.append(5)
-
-[print(item, end=' | ') for item in lst]
-print('Yo')
+for item in lst:
+    if "Task-" in item:
+        print(item.split('-')[1].split('.')[0])
