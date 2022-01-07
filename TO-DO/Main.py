@@ -1,9 +1,6 @@
-"""
-  Overview>
-
-"""
 
 # @ Imports
+from typing import ValuesView
 import typer
 import os
 from Database import Database, TaskId
@@ -11,24 +8,33 @@ from Viewer import Table, Display
 
 database_path = "E:\Coding\Python Codes\Projects\\TO-DO\Database"
 
-# * Defining
+# @ Initialising the basic ammenities
 
+# $ remove it some how
 titles = ["Id", "Name", "Priority", "Completed", "Description"]
 
+# - typer init
 app = typer.Typer()
 
+# - database init
 database = Database(database_path)
 Id = TaskId(database_path)
 id = iter(Id)
 
+# - viewer init
 toDoTable = Table(titles)
 display = Display(toDoTable)
+
+# * Defining
+
 Tasks = []
 
 
 def Task(name, id, priority=5, description=None):
     description = description if description else name
-
+    """
+    a simple method for making a task object in dict format using params and returning it for storage
+    """
     task = {
         "Id": id,
         "Name": name,
@@ -43,33 +49,36 @@ def Task(name, id, priority=5, description=None):
 @app.command()
 def add(taskname: str, priority: int = 0, description: str = ''):
     """
-    used for adding tasks
+    used for adding tasks in the to-do-list
     """
     try:
+        # - making a task object using {Task()} and storing it the database
         task = Task(taskname, next(id), priority, description)
         database.SaveFile(task)
-
-        print(taskname, "made succesfully!")
-
     except:
         print('error')
+    finally:
+        view()
 
 
 @app.command()
 def view():
     """
-    this is for viewing the task at hand
+    this is for viewing the task at hand in table formate
     """
-    pass
-
+    # - finding all the task files in the database
     for task in os.listdir(database.database_path):
+        # - finding the id of the task at hand
         if "Task-" in task:
-            index = int(task.split('-')[1].split('.')[0])
+            taskId = int(task.split('-')[1].split('.')[0])
 
-            task = database.LoadFile(index)
+            # - retrieving the stored task using the id
+            task = database.LoadFile(taskId)
 
+            # - adding the task retrieved in the {Tasks}
             Tasks.append(task)
 
+    # - adding the tasking at hand in the table and printing the table
     for task in Tasks:
         toDoTable.AddToTable(task)
 
@@ -79,10 +88,9 @@ def view():
 @app.command()
 def completed(taskid: int):
     """
-    for marking the completed tasks
+    for marking the completed tasks as completed
     """
     database.ChangeFile(taskid)
-    pass
 
 
 @app.command()
@@ -90,6 +98,7 @@ def remove(taskid: int):
     """
     to remove a certain task using id of the task
     """
+    # - checking if the task is completed or not if it then only trashing the task
     if database.LoadFile(taskid)["Completed"] == True:
         database.TrashFile(taskid)
     else:
@@ -99,21 +108,25 @@ def remove(taskid: int):
 @app.command()
 def clear(confirmation: bool = False):
     """
-    to clear all the task in the list
+    to clear all the task in the to-do-list
     """
+    # - temp variable for checking mechanism
     canBeCleared = True
 
+    # - finding all the tasks in the database and storing them in the Tasks
     for task in os.listdir(database.database_path):
         if "Task-" in task:
             index = int(task.split('-')[1].split('.')[0])
 
             task = database.LoadFile(index)
 
+            # @ - checking mechanism at work
             if task["Completed"] == False:
                 canBeCleared = False
 
             Tasks.append(task)
 
+    # - finalising the checking mechanism
     if canBeCleared or confirmation:
         for task in Tasks:
             database.TrashFile(task["Id"])
@@ -131,45 +144,4 @@ def check(times: int):
 
 # ? Implementation
 if __name__ == "__main__":
-
     app()
-
-    # * - test for save the tasks
-    # Tasks = [
-    #     Task(name=f"{index}-task",
-    #          id=next(id),
-    #          priority=2,
-    #          description=f"Test task {index}") for index in range(5)
-    # ]
-
-    # for task in Tasks:
-    #     database.SaveFile(task)
-
-    # * - test for retrieving the tasks
-    # for task in os.listdir(database.database_path):
-    #     if "Task-" in task:
-    #         index = int(task.split('-')[1].split('.')[0])
-
-    #         task = database.LoadFile(index)
-    #         Tasks.append(task)
-
-    # * - test for changing the tasks
-    # database.ChangeFile(1)
-
-    # * - test for trashing the tasks
-    # database.TrashFile(1)
-
-    # for task in os.listdir(database.database_path):
-    #     if "Task-" in task:
-    #         index = int(task.split('-')[1].split('.')[0])
-
-    #         task = database.LoadFile(index)
-    #         Tasks.append(task)
-
-    # [print(task) for task in Tasks]
-
-    # * - test for table formation
-    # for task in Tasks:
-    #     toDoTable.AddToTable(task)
-
-    # display.PrintTable()

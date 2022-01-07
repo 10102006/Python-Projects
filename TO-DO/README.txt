@@ -32,3 +32,44 @@ Viewer:
    - make an instance of {Display} class => display = Display(toDoTable)
    - add task to the table using => toDoTable.AddToTable(task)
    - print the table using => display.PrintTable()
+
+    # * - test for save the tasks
+    # Tasks = [
+    #     Task(name=f"{index}-task",
+    #          id=next(id),
+    #          priority=2,
+    #          description=f"Test task {index}") for index in range(5)
+    # ]
+
+    # for task in Tasks:
+    #     database.SaveFile(task)
+
+    # * - test for retrieving the tasks
+    # for task in os.listdir(database.database_path):
+    #     if "Task-" in task:
+    #         index = int(task.split('-')[1].split('.')[0])
+
+    #         task = database.LoadFile(index)
+    #         Tasks.append(task)
+
+    # * - test for changing the tasks
+    # database.ChangeFile(1)
+
+    # * - test for trashing the tasks
+    # database.TrashFile(1)
+
+    # for task in os.listdir(database.database_path):
+    #     if "Task-" in task:
+    #         index = int(task.split('-')[1].split('.')[0])
+
+    #         task = database.LoadFile(index)
+    #         Tasks.append(task)
+
+    # [print(task) for task in Tasks]
+
+    # * - test for table formation
+    # for task in Tasks:
+    #     toDoTable.AddToTable(task)
+
+    # display.PrintTable()
+
