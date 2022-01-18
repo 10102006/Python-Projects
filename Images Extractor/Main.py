@@ -65,12 +65,12 @@ def ExctractSeries(main_url, series_name, extra_chapters=[], endingChapter=1, st
 
           converter = Solo(images_folder_path, pdf_folder_path)
 
-          print('-----------------------------------------')      
+          print('-----------------------------------------')
           converter.D_MakePdfs(pdfs_folder_path)
 
           print('Files made into pdfs!')
 
-          converter.D_Pdfs_Merger(pdfs_folder_path, manga_chapter_name)  
+          converter.D_Pdfs_Merger(pdfs_folder_path, manga_chapter_name)
 
         except Exception as exception:
           print(exception)

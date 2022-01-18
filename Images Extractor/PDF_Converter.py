@@ -24,8 +24,6 @@ What has beeen done:
             1. What files are made into pdf
             2. What files are merged
             3. If the merged files making is success or not
-        
-        
 """
 
 # @ Imports
@@ -89,7 +87,7 @@ class Solo():
         """
         self.image_folder_path = image_folder_path
         self.pdf_folder_path = pdf_folder_path
-    
+
     def D_MakePdf(self, pdf_folder_path, image_name):
         """
             What is done:
@@ -134,7 +132,7 @@ class Solo():
 
             else:
                 print(f'{f"{image}.pdf"} sucessfully made! > MakePDFS')
-                
+
         print('--------------------------------------------------------')
 
     @staticmethod
@@ -157,7 +155,7 @@ class Solo():
 
             Extra:
                 9. We can also the pdf files if need
-                
+
         """
         os.chdir(pdf_folder_path)
         int_pdfs = [pdf[:-4] for pdf in os.listdir()]
