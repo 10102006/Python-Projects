@@ -30,7 +30,7 @@ class Database:
     def __init__(self, path):
         """
             - path for the database is stored in var {database_path}
-            - Intiating {ID()} method for enumeration
+            - Intiating ->ID() method for enumeration
         """
         self.database_path = path
 
