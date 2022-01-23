@@ -61,7 +61,7 @@ class Schedule:
 
         return self.schedule
 
-    def PrintSchedule(self, schedule=''):
+    def _PrintSchedule(self, schedule=''):
         """
             - Making a temp ```schedule``` var
             - Printing the titles using a short-hand loop
@@ -76,7 +76,7 @@ class Schedule:
         print('-' * 43)
 
         # - Using for loop to get all the index in the schedule
-        for index, item in enumerate(schedule["Index"]):
+        for index, item in enumerate(sorted(schedule["Index"])):
 
             # - Printing the index
             print(str(item).rjust(4), end=". | ")

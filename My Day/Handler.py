@@ -22,7 +22,7 @@ class Database:
         self.databasePath = join(path)
         os.chdir(path)
 
-    def CreateSlot(self, name, startingTime, endingTime=''):
+    def CreateSlot(self, name, startingTime, endingTime):
         """
             - Using a certain mechanic for finding time
             - And filling in the values given as param in a dict
@@ -32,17 +32,15 @@ class Database:
         # - In a concatinated way finding if the time values are in a tuple or time format and taking according actions
         # - If the param is tuple then making a time obj using the tuple values
         # - Else using the time obj as it is
-        startingTime = time(
-            startingTime[0], startingTime[1]) if type(startingTime) == tuple else startingTime
-        endingTime = time(
-            endingTime[0], endingTime[1]) if type(endingTime) == tuple else endingTime
+
+        startingTime, endingTime = (item if type(item) == datetime.time else time(
+            int(item[0]), int(item[1])) for item in [startingTime, endingTime])
 
         slot = {
-            "Name": name,
-            "StartingTime": startingTime,
-            "EndingTime": time(
-                startingTime.hour + 1, startingTime.minute) if not endingTime else endingTime,
             "Index": 0,
+            "StartingTime": startingTime,
+            "EndingTime": endingTime,
+            "Name": name,
         }
 
         Database.SetIndex(slot)

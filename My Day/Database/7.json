@@ -1,6 +1,6 @@
 {
-    "Name": "Jogging",
-    "StartingTime": "14:30:00",
-    "EndingTime": "15:30:00",
-    "Index": 7
+    "Index": 7,
+    "StartingTime": "10:00:00",
+    "EndingTime": "11:00:00",
+    "Name": "Task-1"
 }
