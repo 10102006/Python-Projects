@@ -61,7 +61,7 @@ class Schedule:
 
         return self.schedule
 
-    def _PrintSchedule(self, schedule=''):
+    def PrintSchedule(self, schedule=''):
         """
             - Making a temp ```schedule``` var
             - Printing the titles using a short-hand loop
