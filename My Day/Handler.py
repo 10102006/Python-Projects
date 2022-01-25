@@ -80,7 +80,7 @@ class Database:
         """
 
         # - Looping using enumerate for index counting
-        for index, file in enumerate(os.listdir(), start=1):
+        for index, file in enumerate(sorted(os.listdir(), key=len), start=1):
             file = Database.LoadSlot(file)
 
             startingTime = file.get("StartingTime")
@@ -121,18 +121,24 @@ if __name__ == "__main__":
     database = Database(database_path)
 
     # Single unique slot
-    slot = database.CreateSlot("Jogging", (12, 32))
+    slot = database.CreateSlot(
+        "test",
+        startingTime=(int(input(". ")), 0),
+        endingTime=(int(input(".. ")), 0)
+    )
+
+    print(slot)
 
     # Saving the unique slot
-    database.SaveSlot(slot)
+    # database.SaveSlot(slot)
 
     # Retrieving the Saved slot
-    slot = database.LoadSlot(slot["Index"])
+    # slot = database.LoadSlot(slot["Index"])
 
     # Placeholder slots
-    for index in range(5):
-        slot = database.CreateSlot(f"Task-{index}", (10 + index * 2, 0))
-        database.SaveSlot(slot)
+    # for index in range(5):
+    #     slot = database.CreateSlot(f"Task-{index}", (10 + index * 2, 0))
+    #     database.SaveSlot(slot)
 
     # Rearranging the slots to accomodate the new slot
-    database.AdjustSlot(slot)
+    # database.AdjustSlot(slot)
