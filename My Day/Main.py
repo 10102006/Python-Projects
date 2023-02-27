@@ -5,7 +5,6 @@ REPL:
   1. Continuous command input
   2. Command Manager will make string shorts for each function
   3. Command format:
-    - 
 
 """
 
@@ -13,7 +12,6 @@ REPL:
 import os
 from os import path, remove
 from cmd import Cmd
-
 
 from datetime import time
 
@@ -75,7 +73,7 @@ class MyPrompt(Cmd):
                 if slot["StartingTime"] == indexTime:
                     slot.update({"Index": index})
 
-        slots = sorted(slots, key=lambda slot: slot["Index"])
+        slots.sort(slots, key=lambda slot: slot["Index"])
 
         [remove(slot) for slot in os.listdir()]
         [self.database.AdjustSlot(slot) for slot in slots]
@@ -91,4 +89,5 @@ class MyPrompt(Cmd):
 if __name__ == '__main__':
     prompt = MyPrompt(database_path)
     prompt.prompt = '> '
+    prompt.do_align([])
     # prompt.cmdloop('Starting prompt...')

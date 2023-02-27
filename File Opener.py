@@ -1,13 +1,18 @@
-"""Currently working on a back function"""
+"""
+Currently working on a back function
+"""
 
 
 # * Imports
 import os
 from os import path
 import re
+from cmd import Cmd
+
 
 schoolBooks_directory = "E:\\School Stuffs\\School Books"
-lightNovels_directory = "F:\\Downloads\\Books"
+lightNovels_directory = "F:\Books"
+code_directory = r"E:\Coding"
 
 # @ Defination
 
@@ -23,12 +28,10 @@ def Choose_From_List(list_object):
 
     item_wanted = input("Enter the index number of the item you want: ")
 
+    print('-----------------------------------------')
     if len(item_wanted) and item_wanted.isnumeric():
         item_wanted = int(item_wanted) - 1
         return list_object[item_wanted]
-
-    elif item_wanted == '.':
-        return "."
 
     else:
         slt_lst = re.findall("[0-9][0-9]|[0-9]", item_wanted)
@@ -36,23 +39,8 @@ def Choose_From_List(list_object):
 
         return slt_lst
 
-    print('-----------------------------------------')
 
-
-def Previous_path(give_path):
-    """
-    This function will take all the components from the path and remove the last path
-    """
-    path_components = re.split("\\\\", give_path)[:-1]
-
-    new_path = ""
-    for str in path_components:
-        new_path = (f"{new_path}{str}\\\\")
-
-    return new_path
-
-
-def Main(folder_directory):
+def Program(folder_directory):
     """
     This is the main function where all the stuff is happening
         1. Changing directory to {folder_directory} for check
@@ -62,11 +50,11 @@ def Main(folder_directory):
             3. This loop continue till a file is selected
             4. If another folder is selected we will change the directory to that folder
     """
+    print(1)
     os.chdir(folder_directory)
 
     while True:
         directory_extension = Choose_From_List(os.listdir())
-
 
         if type(directory_extension) == list and path.isdir(folder_directory):
             for file in directory_extension:
@@ -79,11 +67,6 @@ def Main(folder_directory):
 
                 os.startfile(temp_folder_directory)
             break
-
-        elif directory_extension == ".":
-            print("previous selected!")
-            folder_directory = Previous_path(folder_directory)
-            print(folder_directory)
 
         else:
             folder_directory = path.join(
@@ -98,17 +81,34 @@ def Main(folder_directory):
                 os.chdir(folder_directory)
 
 
+class Main(Cmd):
+    def do_ln(self, args):
+        """
+        """
+        Program(lightNovels_directory)
+
+    def do_sb(self, args):
+        """
+        """
+        Program(schoolBooks_directory)
+
+    def do_cd(self, args):
+        """
+        """
+        Program(code_directory)
+
+
+    def do_folder(self, args):
+        """
+        """
+        new_directory = path.join(input("Enter Path: "))
+        Program(new_directory)
+
+
 # ? Running the code
 
 
 if __name__ == "__main__":
-    choose_list = ["Light Novels", "School Books", "Own Folder"]
-    whatToOpen = Choose_From_List(choose_list)
-
-    if whatToOpen == "Light Novels":
-        Main(lightNovels_directory)
-    elif whatToOpen == "School Books":
-        Main(schoolBooks_directory)
-    else:
-        new_directory = path.join(input("Enter Path: "))
-        Main(new_directory)
+    main = Main()
+    main.prompt = " > "
+    main.cmdloop("File Opener Starting...")

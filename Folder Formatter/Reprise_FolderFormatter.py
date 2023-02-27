@@ -26,7 +26,7 @@ def FormatFilenames(folderpath=_path, shouldNumerised=False):
         2. Looping through the files and capitalising the names
         3. If the files should be numerised then lopping through the files then the files will be numbered
     """
-    # * Obatining the filenames with the FolderTree file
+    # * Obtaining the filenames with the FolderTree file
         # ? The detail_required is 1 by default
     files = FolderDetails(folderpath)
 

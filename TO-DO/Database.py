@@ -30,7 +30,7 @@ class Database:
     def __init__(self, path):
         """
             - path for the database is stored in var {database_path}
-            - Intiating ->ID() method for enumeration
+            - Initiating ->ID() method for enumeration
         """
         self.database_path = path
 
@@ -41,9 +41,9 @@ class Database:
 
     def ID(self, function=0):
         """
-            - this is the initialisation for the id enumerator for the {TaskId} class
+            - this is the initialization for the id enumerator for the {TaskId} class
             - use of the param {function} is to check what is needed:
-            - if 0 then initialising the file for the id enumeration storage
+            - if 0 then initializing the file for the id enumeration storage
             - if 1 then the reading and setting of the starting enumeration is took place
         """
         # - Creating a file for the storage of the last id index
@@ -52,7 +52,7 @@ class Database:
                 with open("ID.txt", "w") as id_file:
                     id_file.write("1")
 
-        # - Reading and Initialisation of the first enumeration
+        # - Reading and Initialization of the first enumeration
         elif function == 1:
             with open("Id.txt", "r") as id_file:
                 return int(id_file.readline())
@@ -71,7 +71,7 @@ class Database:
 
     @staticmethod
     def LoadFile(taskId):
-        """ - this is for retrieving of the task from the file created using the param {taksId}, which corresponds to the task id"""
+        """ - this is for retrieving of the task from the file created using the param {taskId}, which corresponds to the task id"""
         filename = f"Task-{taskId}"
 
         # - retrieving the data using the json load() in dict format
@@ -80,7 +80,7 @@ class Database:
             return data
 
     def ChangeFile(self, taskId, completed=True):
-        """ - implementation of the #checked funtion of the To-Do-List by change the value of the {completed} attribute of the task dict"""
+        """ - implementation of the #checked function of the To-Do-List by change the value of the {completed} attribute of the task dict"""
         # - retrieving the data of the task in dict formate
         data = self.LoadFile(taskId)
 

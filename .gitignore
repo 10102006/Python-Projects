@@ -1,19 +1,5 @@
-Folder Formatter/__pycache__/FolderTree.cpython-39.pyc
-Holiday Planner/__pycache__/FolderTree.cpython-39.pyc
-Password Manager/__pycache__/FolderTree.cpython-38.pyc
-__pycache__/m_FolderTree.cpython-39.pyc
-Manga Maker/__pycache__/Images_Extractor.cpython-39.pyc
-Manga Maker/__pycache__/Images_Extractor.cpython-39.pyc
-Manga Maker/__pycache__/PDF_Converter.cpython-39.pyc
-Images Extractor/__pycache__/Images_Extractor.cpython-39.pyc
-Images Extractor/__pycache__/PDF_Converter.cpython-39.pyc
-Password Manager\__pycache__
-Password Manager\__pycache__\FolderTree.cpython-38.pyc
-Password Manager\__pycache__\FolderTree.cpython-39.pyc
-_Notes Apps/Notes.py
-_Notes Apps/__pycache__/FolderTree.cpython-39.pyc
-MCQ Quesionarie\Database
-Password Manager/__pycache__/FolderTree.cpython-39.pyc
-Password Manager\Database
-My Day/__pycache__/Viewer.cpython-39.pyc
-My Day/Database
+**/Database/*.json
+*/Database*
+**/__pycache__/*.pyc
+*.json
+*.pyc
